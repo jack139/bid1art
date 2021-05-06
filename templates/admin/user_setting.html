@@ -25,20 +25,20 @@ $var name: $str1 $name
 <tr><td>注册时间</td><td class="t_l">$reg_time</td></tr>
 <tr><td rowspan="1">用户权限</td>
 <td class="t_l">
-    <input type="checkbox" name="priv" value="EA_ADMIN"
-    $if 'EA_ADMIN' in level:
-        checked="checked"
-    /> EA管理
-
     <input type="checkbox" name="priv" value="DATA_MODIFY"
     $if 'DATA_MODIFY' in level:
         checked="checked"
     /> 数据修改
 
-    <input type="checkbox" name="priv" value="TALKBOT"
-    $if 'TALKBOT' in level:
+    <input type="checkbox" name="priv" value="PLATFORM"
+    $if 'PLATFORM' in level:
         checked="checked"
-    /> 机器人语料库
+    /> 平台管理
+
+    <input type="checkbox" name="priv" value="AUCTION_HOUSE"
+    $if 'AUCTION_HOUSE' in level:
+        checked="checked"
+    /> 拍卖行管理
 
 </td>
 </tr>

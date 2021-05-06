@@ -31,14 +31,14 @@ def validateEmail(email):
 PRIV_USER     = 0b01000000  # 64
 PRIV_SUPER    = 0b00010000  # 16
 PRIV_ADMIN    = 0b00001000  # 8
-PRIV_WX       = 0b00000100  # 4
 PRIV_VISITOR  = 0b00000000  # 0
 
 # 菜单权限
 MENU_LEVEL = {
-    'ADMIN'       : 1,   # 管理员
-    'DATA_MODIFY' : 2,   # 数据修改
-    'SUPER'       : 3,   # 平台管理
+    'COMMON_USER'   : 1,   # 普通用户
+    'DATA_MODIFY'   : 2,   # 数据修改
+    'PLATFORM'      : 3,   # 平台管理
+    'AUCTION_HOUSE' : 4,   # 拍卖行管理
 }
 
 user_level = {
