@@ -23,7 +23,7 @@ cli = {
 # MongoClient('10.168.11.151', replicaset='rs0', readPreference='secondaryPreferred') # 使用secondary 读
 # MongoClient('mongodb://10.168.11.151:27017,10.252.95.145:27017,10.252.171.8:27017/?replicaSet=rs0')
 
-db_web = cli['web']['bnb_db']
+db_web = cli['web']['face_db']
 db_web.authenticate('ipcam','ipcam')
 
 db_primary = db_web
