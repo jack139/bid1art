@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# 本地调试
+# uwsgi --http 127.0.0.1:8888  --wsgi-file bid1art.py --check-static ../
+
 import web
 import os, sys, gc
 import time, json
@@ -8,7 +11,8 @@ from decimal import Decimal
 from bson.objectid import ObjectId
 from config.url import urls
 from config import setting
-from config.mongosession import MongoStore
+#from config.mongosession import MongoStore
+from config.redissession import RedisStore
 import helper, app_helper
 from libs import rand_code
 
@@ -31,12 +35,12 @@ web.config.session_parameters['ignore_expiry'] = True
 
 if setting.debug_mode==False:
     ### for production
-    session = web.session.Session(app, MongoStore(db_primary, 'sessions'), 
+    session = web.session.Session(app, RedisStore(), 
         initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':''})
 else:
     ### for staging,
     if web.config.get('_session') is None:
-        session = web.session.Session(app, MongoStore(db_primary, 'sessions'), 
+        session = web.session.Session(app, RedisStore(), 
             initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':''})
         web.config._session = session
     else:
@@ -84,7 +88,8 @@ class Login:
         else:
             render = create_render()
 
-            db_sys = db.user.find_one({'uname':'settings'})
+            #db_sys = db.user.find_one({'uname':'settings'})
+            db_sys = None
             if db_sys==None:
                 signup=0
             else:

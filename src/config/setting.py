@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import web
-from pymongo import MongoClient
+#from pymongo import MongoClient
 
 #####
 debug_mode = True   # Flase - production, True - staging
@@ -13,7 +13,7 @@ https_proxy = 'https://192.168.2.108:8888'
 proxy_list = ['192.168.2.103']
 enable_local_test = True
 #####
-
+'''
 db_serv_list='127.0.0.1'
 # db_serv_list='mongodb://10.168.11.151:27017,10.252.95.145:27017,10.252.171.8:27017/?replicaSet=rs0'
 
@@ -27,6 +27,9 @@ db_web = cli['web']['face_db']
 db_web.authenticate('ipcam','ipcam')
 
 db_primary = db_web
+'''
+
+db_web = db_primary = None
 
 thread_num = 1
 auth_user = ['test','gt']
