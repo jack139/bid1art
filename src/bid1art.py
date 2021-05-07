@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # 本地调试
-# uwsgi --http 127.0.0.1:8888  --wsgi-file bid1art.py --check-static ../
+# uwsgi --http 127.0.0.1:8000  --wsgi-file bid1art.py --check-static ../
 
 import web
 import os, sys, gc
@@ -20,6 +20,8 @@ from helper import time_str
 from helper import get_privilege_name
 from helper import logged
 from helper import create_render
+
+from chain_api import fork_api
 
 db = setting.db_web  # 默认db使用web本地
 db_primary = setting.db_primary
@@ -72,28 +74,11 @@ class Login:
     def GET(self):
         if logged():
             render = create_render()
-
             result = 0
-
-            if logged(helper.PRIV_USER):
-                # 提醒改密码
-                db_user=db.user.find_one({'uname':session.uname},{'pwd_update':1})
-                if int(time.time()) - db_user.get('pwd_update', 0) > 3600*24*30:
-                    db.user.update_one({'uname':session.uname},{'$set' :{'pwd_update':int(time.time())}}) # 只提示一次， 2017-12-11
-                    raise web.seeother('/settings_user?set_pwd=1')
-                else:
-                    return render.portal(session.uname, get_privilege_name(), [result])
-            else:
-                return render.portal(session.uname, get_privilege_name(), [result])
+            return render.portal(session.uname, get_privilege_name(), [result])
         else:
             render = create_render()
-
-            #db_sys = db.user.find_one({'uname':'settings'})
-            db_sys = None
-            if db_sys==None:
-                signup=0
-            else:
-                signup=db_sys['signup']
+            signup=0
 
             # 生成验证码
             rand=app_helper.my_rand(4).upper()
@@ -104,36 +89,77 @@ class Login:
             return render.login(signup, png2)
 
     def POST(self):
-        name0, passwd, rand = web.input().name, web.input().passwd, web.input().rand
-        
-        name = name0.lower()
-        
+        chainaddr, passwd, rand = web.input().chainaddr, web.input().passwd, web.input().rand
+
+        passwd = ' '.join(passwd.split()) # 去掉回车，只间隔一个空格
+        name=''
+        menu_level = 60*'-'
+
         render = create_render()
 
         session.login = 0
         session.privilege = 0
         session.uname=''
 
-        db_user=db.user.find_one({'uname':name},{'login':1,'passwd':1,'privilege':1,'menu_level':1,'pwd_update':1,'rand_fail':1})
-        if db_user!=None and db_user['login']!=0:
-            if session.menu_level>=5:
-                print('-----> 刷验证码！')
-                return render.login_error('验证码错误，请重新登录！')
-            if session.uid != rand.upper():
-                session.menu_level += 1
-                return render.login_error('验证码错误，请重新登录！')
-            if db_user['passwd']!=my_crypt(passwd):
-                return render.login_error('密码错误，请重新登录！')
+        if session.menu_level>=5:
+            print('-----> 刷验证码！')
+            return render.login_error('验证码错误，请重新登录！')
+        if session.uid != rand.upper():
+            session.menu_level += 1
+            return render.login_error('验证码错误，请重新登录！')
 
-            session.login = 1
-            session.uname = name
-            session.uid = db_user['_id']
-            session.privilege = int(db_user['privilege'])
-            # 若是老用户则将session的权限位数增加至60
-            session.menu_level = db_user['menu_level'] if len(db_user['menu_level']) == 60 else db_user['menu_level']+30*'-'
-            raise web.seeother('/')
+        # 链上验证用户
+        r1 = fork_api('/query/user/verify', {
+            'chain_addr' : chainaddr,
+            'mystery'    : passwd,
+        })
+        if (r1 is None) or r1['code']!=0:
+            return render.login_error('登录失败，请重新登录！(%s %s)'%\
+                ((r1['code'], r1['msg']) if r1 else ('', '')))
+
+        if r1['data']['verified']==False:
+            return render.login_error('密码错误，请重新登录！')
+
+        if chainaddr==setting.SYS_ADMIN: # 管理员
+            privilege = helper.PRIV_ADMIN
+            name = 'admin'
+            pos = helper.MENU_LEVEL['ADMIN']
+            menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+
         else:
-            return render.login_error()
+            # 获取用户信息
+            r1 = fork_api('/query/user/info', {
+                'chain_addr' : chainaddr,
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.login_error('出错了，请联系管理员！(%s %s)'%\
+                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            name = r1['data']['user']['login_name']
+            # 不同用户权限
+            if r1['data']['user']['user_type'] in ['TRD', 'DEL', 'ART']:
+                privilege = helper.PRIV_TRD
+                pos = helper.MENU_LEVEL['TRD']
+                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+            elif r1['data']['user']['user_type'] == 'AH':
+                privilege = helper.PRIV_AH
+                pos = helper.MENU_LEVEL['AH']
+                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+                pos = helper.MENU_LEVEL['REV'] # 拍卖行也有评论权限
+                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+            elif r1['data']['user']['user_type'] == 'REV':
+                privilege = helper.PRIV_REV
+                pos = helper.MENU_LEVEL['REV']
+                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+
+        # 设置session
+        session.login = 1
+        session.uname = name
+        session.uid = chainaddr
+        session.privilege = privilege
+        session.menu_level = menu_level
+        raise web.seeother('/')
+
 
 class Reset:
     def GET(self):

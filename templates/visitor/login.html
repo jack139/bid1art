@@ -20,16 +20,18 @@ $var js:
         </thead>
         <tbody>
       <tr>
-        <td class="name">用户名</td>
-        <td class="t_l"><input type="text" name="name" id="name" /></td>
+        <td class="name">用户链地址</td>
+        <td class="t_l"><input type="text" name="chainaddr" id="addr" size="80" /></td>
       </tr>
       <tr>
-        <td class="name">密码</td>
-        <td class="t_l"><input type="password" name="passwd" id="pwd" /></td>
+        <td class="name">密码字符串</td>
+        <td class="t_l">
+          <textarea rows="3" cols="80" name="passwd" id="pwd"></textarea>
+        </td>
       </tr>
       <tr>
-        <td class="name">验证码&nbsp;&nbsp;<img src="$png" /></td>
-        <td class="t_l"><input type="text" name="rand" id="rand" /></td>
+        <td class="name">验证码</td>
+        <td class="t_l"><img src="$png" />&nbsp;&nbsp;<input type="text" name="rand" id="rand" /></td>
       </tr>
       <tr>
         <td class="name" colspan="2"><input type="submit" name="button" id="button" value="登录" /></td>

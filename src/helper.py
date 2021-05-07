@@ -28,24 +28,34 @@ def validateEmail(email):
 ##############################################
 
 # 用户等级
-PRIV_USER     = 0b01000000  # 64
-PRIV_SUPER    = 0b00010000  # 16
-PRIV_ADMIN    = 0b00001000  # 8
-PRIV_VISITOR  = 0b00000000  # 0
+PRIV_VISITOR = 0b00000000
+PRIV_ADMIN   = 0b00000001
+PRIV_USER    = 0b00000100
+PRIV_TRD     = 0b00001000
+PRIV_AH      = 0b00010000
+PRIV_DEL     = 0b00100000
+PRIV_REV     = 0b01000000
+PRIV_ART     = 0b10000000
 
 # 菜单权限
 MENU_LEVEL = {
-    'COMMON_USER'   : 1,   # 普通用户
-    'DATA_MODIFY'   : 2,   # 数据修改
-    'PLATFORM'      : 3,   # 平台管理
-    'AUCTION_HOUSE' : 4,   # 拍卖行管理
+    'ADMIN' : 1,   # 平台管理员
+    'TRD'   : 2,   # 交易人
+    'AH'    : 3,   # 拍卖行
+    'DEL'   : 4,   # 经销商
+    'REV'   : 5,   # 评论家
+    'ART'   : 6,   # 艺术家
 }
 
 user_level = {
     PRIV_VISITOR  : '访客',
     PRIV_ADMIN    : '管理员',
-    PRIV_SUPER    : '平台管理', 
-    PRIV_USER     : '普通用户', 
+    PRIV_USER     : '普通用户',
+    PRIV_TRD      : '交易人',  
+    PRIV_AH       : '拍卖行', 
+    PRIV_DEL      : '经销商', 
+    PRIV_REV      : '评论家', 
+    PRIV_ART      : '艺术家', 
 }
 
 #################
@@ -113,11 +123,11 @@ def create_render(plain=False, globals={}, force_visitor=False):
         return web.template.render('templates/visitor', base=layout, globals=globals)
 
     if logged():
-        if privilege&PRIV_SUPER:
+        if privilege&PRIV_AH or privilege&PRIV_REV:
             render = web.template.render('templates/super', base=layout, globals=globals)
         elif privilege&PRIV_ADMIN:
             render = web.template.render('templates/admin', base=layout, globals=globals)
-        elif privilege&PRIV_USER:
+        elif privilege&PRIV_TRD or privilege&PRIV_DEL or privilege&PRIV_ART:
             render = web.template.render('templates/user', base=layout, globals=globals)
         else:
             render = web.template.render('templates/visitor', base=layout, globals=globals)

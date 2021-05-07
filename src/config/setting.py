@@ -91,3 +91,11 @@ REDIS_CONFIG = {
 
 # dispatcher 中 最大线程数
 MAX_DISPATCHER_WORKERS = 8
+
+
+############ chain setting
+
+SYS_ADMIN = "bid1art16zs5zpmsw5wezyrpnls76ytdy7ws2zpqan9ey9"
+
+CHAIN_API_HOST = "127.0.0.1"
+CHAIN_API_PORT = "8888"
