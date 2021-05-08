@@ -168,64 +168,6 @@ class Reset:
         render = create_render()
         return render.logout()
 
-class SettingsUser:
-    def _get_settings(self):
-        db_user=db.user.find_one({'_id':session.uid},{'uname':1,'full_name':1})
-        return db_user
-    
-    def GET(self):
-        if logged(helper.PRIV_USER):
-            render = create_render()
-            if web.input(set_pwd='')['set_pwd']=='1':
-                return render.settings_user(session.uname, get_privilege_name(), self._get_settings(), '请重新设置密码')
-            else:
-                return render.settings_user(session.uname, get_privilege_name(), self._get_settings())
-        else:
-            raise web.seeother('/')
-
-    def POST(self):
-        if logged(helper.PRIV_USER):
-            render = create_render()
-            #full_name = web.input().full_name
-            old_pwd = web.input().old_pwd.strip()
-            new_pwd = web.input().new_pwd.strip()
-            new_pwd2 = web.input().new_pwd2.strip()
-            
-            if old_pwd!='':
-                if new_pwd=='':
-                    return render.info('新密码不能为空！请重新设置。')
-                if new_pwd!=new_pwd2:
-                    return render.info('两次输入的新密码不一致！请重新设置。')
-                # 检查密码强度
-                _num = 0
-                _upper = 0
-                _misc = 0
-                for xx in new_pwd:
-                    if xx.isdigit():
-                        _num = 1
-                    elif xx.isupper():
-                        _upper = 1
-                    elif xx in '+-_/%$':
-                        _misc = 1
-                if _num+_upper+_misc<3:
-                    return render.info('密码强度太低，容易被破解，请重新输入！')
-
-                db_user=db.user.find_one({'_id':session.uid},{'passwd':1})
-                if my_crypt(old_pwd)==db_user['passwd']:
-                    db.user.update_one({'_id':session.uid}, {'$set':{
-                        'passwd'     : my_crypt(new_pwd),
-                        'pwd_update' : int(time.time()),
-                        #'full_name'  : full_name
-                    }})
-                else:
-                    return render.info('登录密码验证失败！请重新设置。')
-            #else:
-            #   db.user.update_one({'_id':session.uid}, {'$set':{'full_name':full_name}})
-
-            return render.info('成功保存！','/')
-        else:
-            raise web.seeother('/')
-
 
 
 ########## Admin 功能 ####################################################
@@ -367,72 +309,7 @@ class AdminUserAdd:
         else:
             raise web.seeother('/')
 
-class AdminSysSetting:      
-    def GET(self):
-        if logged(helper.PRIV_ADMIN):
-            render = create_render()
-    
-            db_sys=db.user.find_one({'uname':'settings'})
-            if db_sys!=None:
-                return render.sys_setting(session.uname, user_level[session.privilege], db_sys)
-            else:
-                db.user.insert_one({'uname':'settings','signup':0,'login':0,
-                'pk_count':1,'wt_count':1,'sa_count':1})
-                return render.info('如果是新系统，请重新进入此界面。','/')  
-        else:
-            raise web.seeother('/')
 
-    def POST(self):
-        if logged(helper.PRIV_ADMIN):
-            render = create_render()
-            user_data=web.input(signup='0', pk_count='1', wt_count='1', sa_count='1')
-
-            db.user.update_one({'uname':'settings'},{'$set':{
-                'pk_count': int(user_data['pk_count']),
-                'wt_count': int(user_data['wt_count']),
-                'sa_count': int(user_data['sa_count']),
-            }})
-
-            return render.info('成功保存！','/admin/sys_setting')
-        else:
-            raise web.seeother('/')
-
-class AdminSelfSetting:
-
-    def _get_settings(self):
-        db_user=db.user.find_one({'_id':session.uid})
-        return db_user
-
-    def GET(self):
-        #print(web.ctx)
-        if logged(helper.PRIV_ADMIN):
-            render = create_render()
-            return render.self_setting(session.uname, user_level[session.privilege], self._get_settings())
-        else:
-            raise web.seeother('/')
-
-    def POST(self):
-        if logged(helper.PRIV_ADMIN):
-            render = create_render()
-            old_pwd = web.input().old_pwd.strip()
-            new_pwd = web.input().new_pwd.strip()
-            new_pwd2 = web.input().new_pwd2.strip()
-    
-            if old_pwd!='':
-                if new_pwd=='':
-                    return render.info('新密码不能为空！请重新设置。')
-                if new_pwd!=new_pwd2:
-                    return render.info('两次输入的新密码不一致！请重新设置。')
-                db_user=db.user.find_one({'_id':session.uid},{'passwd':1})
-                if my_crypt(old_pwd)==db_user['passwd']:
-                    db.user.update_one({'_id':session.uid}, {'$set':{'passwd':my_crypt(new_pwd)}})
-                    return render.info('成功保存！','/')
-                else:
-                    return render.info('登录密码验证失败！请重新设置。')
-            else:
-                return render.info('未做任何修改。')
-        else:
-            raise web.seeother('/')
 
 class AdminStatus: 
     def GET(self):

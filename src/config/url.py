@@ -7,14 +7,11 @@ urls = [
 	'/',                'Login',
 	'/login',           'Login',
 	'/logout',          'Reset',
-	'/settings_user',   'SettingsUser',
 
 	# 管理功能
 	'/admin/user',         'AdminUser',
 	'/admin/user_setting', 'AdminUserSetting',
 	'/admin/user_add',     'AdminUserAdd',
-	'/admin/self_setting', 'AdminSelfSetting',
-	'/admin/sys_setting',  'AdminSysSetting',
 	'/admin/status',       'AdminStatus',
 	'/admin/data',         'AdminData',
 ]
