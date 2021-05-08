@@ -37,7 +37,7 @@ $for u in users:
 <div class="article_box">
     $if page > 1:
         <a href="/admin/user?page=$(page-1)">前一页</a>&nbsp;&nbsp;
-    &nbsp;&nbsp;$page&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
     $if has_next:
         <a href="/admin/user?page=$(page+1)">后一页</a>
 </div>

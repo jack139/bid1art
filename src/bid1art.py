@@ -208,58 +208,40 @@ class AdminUserSetting:
 
             if user_data.uid=='':
                 return render.info('错误的参数！')  
-            
-            db_user=db.user.find_one({'_id':ObjectId(user_data.uid)})
-            if db_user!=None:
-                db_shop=db.base_shop.find({'available':1, 'type':{'$in':['chain','store','dark','virtual','pt_house']}}, {'name':1,'type':1})
-                shops = []
-                for s in db_shop:
-                    shops.append((s['_id'], s['name'], helper.SHOP_TYPE[s['type']]))
-                # 若是老用户，则在其menu_level位数的基础上增加至60位权限位
-                new_menu_level = db_user['menu_level'] if len(db_user['menu_level']) == 60 else db_user['menu_level']+30*'-'
-                return render.user_setting(session.uname, user_level[session.privilege], 
-                    db_user, time_str(db_user['time']), 
-                    get_privilege_name(db_user['privilege'],new_menu_level), shops)
-            else:
-                return render.info('错误的参数！')  
+
+            # 获取用户信息
+            r1 = fork_api('/query/user/info', {
+                'chain_addr' : user_data.uid,
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请联系管理员！(%s %s)'%\
+                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            return render.user_setting(session.uname, user_level[session.privilege], r1['data']['user'])
         else:
             raise web.seeother('/')
 
     def POST(self):
         if logged(helper.PRIV_ADMIN):
             render = create_render()
-            user_data=web.input(uid='', shop='', shop2='', full_name='', passwd='', priv=[])
+            user_data=web.input(chain_addr='', bank_acc_name='', 
+                bank_name='', bank_acc_no='', address='', phone='', email='')
 
-            shop=''
-            privilege = helper.PRIV_USER
-            menu_level = 60*'-'
-            for p in user_data.priv:
-                pos = helper.MENU_LEVEL[p]
-                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
-                if p=='DELVERY_ORDER':
-                    privilege |= helper.PRIV_DELIVERY
-                if p in ['DELVERY_ORDER','POS_POS','POS_INVENTORY','ONLINE_MAN',
-                    'POS_AUDIT','POS_REPORT','POS_PRINT_LABEL','POS_REPORT_USER']:
-                    if user_data.shop=='':
-                        return render.info('请选择门店！')
-                    else:
-                        shop = ObjectId(user_data.shop)
+            if user_data.chain_addr=='':
+                return render.info('参数错误！')  
 
-            # 更新数据
-            update_set = {'$set':{
-                'login'  : int(user_data['login']), 
-                'privilege' : privilege, 
-                'menu_level': menu_level,
-                'full_name' : user_data['full_name'],
-                'shop'    : shop
-            }}
-
-            # 如需要，更新密码
-            if len(user_data['passwd'])>0:
-                update_set['$set']['passwd']=my_crypt(user_data['passwd'])
-                update_set['$set']['pwd_update']=0
-
-            db.user.update_one({'_id':ObjectId(user_data['uid'])}, update_set)
+            # 链上修改用户信息
+            r1 = fork_api('/biz/user/modify', {
+                'chain_addr'    : user_data['chain_addr'],
+                'bank_acc_name' : user_data['bank_acc_name'],
+                'bank_name'     : user_data['bank_name'],
+                'bank_acc_no'   : user_data['bank_acc_no'],
+                'address'       : user_data['address'],
+                'phone'         : user_data['phone'],
+                'email'         : user_data['email'],
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
             return render.info('成功保存！','/admin/user')
         else:
@@ -320,7 +302,6 @@ class AdminStatus:
             takit=os.popen('pgrep -f "uwsgi_*.sock"').readlines()
             error_log=os.popen('tail %s/error.log' % setting.logs_path).readlines()
             uwsgi_log=os.popen('tail %s/uwsgi_fair.log' % setting.logs_path).readlines()
-            processor_log=os.popen('tail %s/processor.log' % setting.logs_path).readlines()
             df_data=os.popen('df -h').readlines()
 
             return render.status(session.uname, user_level[session.privilege],{
@@ -328,7 +309,6 @@ class AdminStatus:
                 'takit'       : takit,
                 'error_log'   : error_log,
                 'uwsgi_log'   : uwsgi_log,
-                'process_log' : processor_log,
                 'df_data'     : df_data})
         else:
             raise web.seeother('/')

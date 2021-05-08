@@ -49,8 +49,8 @@ MENU_LEVEL = {
 user_level = {
     PRIV_VISITOR  : '访客',
     PRIV_ADMIN    : '管理员',
-    PRIV_TRD      : '交易者',  
     PRIV_AH       : '拍卖行', 
+    PRIV_TRD      : '交易者',  
     PRIV_DEL      : '经销商', 
     PRIV_REV      : '评论家', 
     PRIV_ART      : '艺术家', 
@@ -121,12 +121,12 @@ def create_render(plain=False, globals={}, force_visitor=False):
         return web.template.render('templates/visitor', base=layout, globals=globals)
 
     if logged():
-        if privilege&(PRIV_AH|PRIV_REV):
+        if privilege&(PRIV_TRD|PRIV_DEL|PRIV_ART|PRIV_REV):
+            render = web.template.render('templates/user', base=layout, globals=globals)
+        elif privilege&PRIV_AH:
             render = web.template.render('templates/super', base=layout, globals=globals)
         elif privilege&PRIV_ADMIN:
             render = web.template.render('templates/admin', base=layout, globals=globals)
-        elif privilege&(PRIV_TRD|PRIV_DEL|PRIV_ART):
-            render = web.template.render('templates/user', base=layout, globals=globals)
         else:
             render = web.template.render('templates/visitor', base=layout, globals=globals)
     else:

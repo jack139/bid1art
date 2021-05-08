@@ -1,4 +1,4 @@
-$def with (name, str1, settings, reg_time, level, base_shop)
+$def with (name, str1, settings)
 
 $var title: 用户设置
 $var css:
@@ -8,49 +8,26 @@ $var name: $str1 $name
 <div class="caption"><h2>用户设置</h2></div>
 
 <form name="settings" method="post" action="/admin/user_setting">
-<input type="hidden" name="uid" value="$settings['_id']" />
+<input type="hidden" name="chain_addr" value="$settings['chain_addr']" />
 
 <table class="props_tb">
 <thead>
         <tr class="even">
             <th>项目</th>
-                <th>内容</th>
+            <th>内容</th>
         </tr>
 </thead>
 <tbody>
 
-<tr><td>用户名</td><td class="t_l">$settings['uname']</td></tr>
-<tr><td>全名</td><td class="t_l"><input type="text" name="full_name" value="$settings['full_name']"/>(名称|电话)</td></tr>
-<tr><td>密码</td><td class="t_l"><input type="password" name="passwd" value=""/></td></tr>
-<tr><td>注册时间</td><td class="t_l">$reg_time</td></tr>
-<tr><td rowspan="1">用户权限</td>
-<td class="t_l">
-    <input type="checkbox" name="priv" value="DATA_MODIFY"
-    $if 'DATA_MODIFY' in level:
-        checked="checked"
-    /> 数据修改
-
-    <input type="checkbox" name="priv" value="PLATFORM"
-    $if 'PLATFORM' in level:
-        checked="checked"
-    /> 平台管理
-
-    <input type="checkbox" name="priv" value="AUCTION_HOUSE"
-    $if 'AUCTION_HOUSE' in level:
-        checked="checked"
-    /> 拍卖行管理
-
-</td>
-</tr>
-
-<tr><td>用户状态</td><td class="t_l"><input type="radio" name="login" value="1" 
-        $if settings['login']==1: 
-            checked="checked"
-    /> 正常 <input type="radio" name="login" value="0"
-        $if settings['login']==0: 
-            checked="checked"
-    /> 停用
-</td></tr>
+<tr><td>用户名</td><td class="t_l">$settings['login_name']</td></tr>
+<tr><td>用户类型</td><td class="t_l">$settings['user_type']</td></tr>
+<tr><td>银行开户姓名</td><td class="t_l"><input type="text" name="bank_acc_name" value="$settings['bank_acc_name']"/></td></tr>
+<tr><td>银行名称</td><td class="t_l"><input type="text" name="bank_name" value="$settings['bank_name']"/></td></tr>
+<tr><td>银行账号</td><td class="t_l"><input type="text" name="bank_acc_no" value="$settings['bank_acc_no']" size="50"/></td></tr>
+<tr><td>联系地址</td><td class="t_l"><input type="text" name="address" value="$settings['address']" size="50" /></td></tr>
+<tr><td>联系电话</td><td class="t_l"><input type="text" name="phone" value="$settings['phone']"/></td></tr>
+<tr><td>电子邮件</td><td class="t_l"><input type="text" name="email" value="$settings['email']"/></td></tr>
+<tr><td>推荐人链地址</td><td class="t_l">$settings['referrer']</td></tr>
 
 </tbody>
 </table>
