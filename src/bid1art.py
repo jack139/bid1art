@@ -174,18 +174,28 @@ class Reset:
 
 class AdminUser:
     def GET(self):
+        PAGE_SIZE = 20
         if logged(helper.PRIV_ADMIN):
+            user_data=web.input(page='1')
             render = create_render()
 
-            users=[]            
-            db_user=db.user.find({'privilege': {'$nin': [helper.PRIV_ADMIN]}},
-                    {'uname':1,'privilege':1,'full_name':1,'login':1}).sort([('_id',1)])
-            if db_user.count()>0:
-                for u in db_user:
-                    if u['uname']=='settings':
-                        continue
-                    users.append([u['uname'],u['_id'],int(u['privilege']),u['full_name'],u['login']])
-            return render.user(session.uname, user_level[session.privilege], users)
+            if not user_data['page'].isdigit():
+                return render.info('page参数错误！')  
+
+            # 链上用户列表
+            r1 = fork_api('/query/user/list', {
+                'page'  : int(user_data['page']),
+                'limit' : PAGE_SIZE,
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            users=[]
+            for u in r1['data']['user_list']:
+                users.append([u['login_name'],u['chain_addr'],u['user_type'],u['reg_date'],u['status']])
+
+            return render.user(session.uname, user_level[session.privilege], users, 
+                int(user_data['page']), len(users)==PAGE_SIZE)
         else:
             raise web.seeother('/')
 
@@ -259,56 +269,44 @@ class AdminUserAdd:
     def GET(self):
         if logged(helper.PRIV_ADMIN):
             render = create_render()
-            db_shop=db.base_shop.find({'available':1, 'type':{'$in':['chain','store','dark','pt_house','virtual']}}, {'name':1,'type':1})
-            shops = []
-            for s in db_shop:
-                shops.append((s['_id'], s['name'], helper.SHOP_TYPE[s['type']]))
-            return render.user_new(session.uname, user_level[session.privilege],shops)
+            return render.user_new(session.uname, user_level[session.privilege])
         else:
             raise web.seeother('/')
 
     def POST(self):
         if logged(helper.PRIV_ADMIN):
             render = create_render()
-            user_data=web.input(uname='', login='0', passwd='', shop='', shop2='', full_name='', priv=[])
+            user_data=web.input(login_name='', user_type='', bank_acc_name='', 
+                bank_name='', bank_acc_no='', address='', phone='', email='', referrer='')
             print(user_data)
 
-            if user_data.uname=='':
+            if user_data.login_name=='':
                 return render.info('用户名不能为空！')  
-            
-            db_user=db.user.find_one({'uname': user_data['uname']})
-            if db_user==None:
-                shop = ''
-                privilege = helper.PRIV_USER
-                menu_level = 60*'-'
-                for p in user_data.priv:
-                    pos = helper.MENU_LEVEL[p]
-                    menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
-                    #if p=='DELVERY_ORDER':
-                    #   privilege |= helper.PRIV_DELIVERY
-                    #if p in ['DELVERY_ORDER','POS_POS','POS_INVENTORY','ONLINE_MAN',
-                    #   'POS_AUDIT','POS_REPORT','POS_PRINT_LABEL','POS_REPORT_USER']:
-                    #   if user_data.shop=='':
-                    #       return render.info('请选择门店！')
-                    #   else:
-                    #       shop = ObjectId(user_data.shop)
 
-                db.user.insert_one({
-                    'login'  : int(user_data['login']),
-                    'uname'  : user_data['uname'],
-                    'full_name' : user_data['full_name'],
-                    'privilege' : privilege,
-                    'menu_level': menu_level,
-                    #'shop'   : shop,
-                    'passwd'    : my_crypt(user_data['passwd']),
-                    'time'    : time.time()  # 注册时间
-                })
-                return render.info('成功保存！','/admin/user')
-            else:
-                return render.info('用户名已存在！请修改后重新添加。')
+            # 链上新建用户
+            r1 = fork_api('/biz/user/register', {
+                'login_name'    : user_data['login_name'],
+                'user_type'     : user_data['user_type'],
+                'bank_acc_name' : user_data['bank_acc_name'],
+                'bank_name'     : user_data['bank_name'],
+                'bank_acc_no'   : user_data['bank_acc_no'],
+                'address'       : user_data['address'],
+                'phone'         : user_data['phone'],
+                'email'         : user_data['email'],
+                'referrer'      : user_data['referrer'],
+            })
+            if (r1 is None) or r1['code']!=0:
+                if r1 and r1['code']==9009:
+                    return render.info('用户名已存在！请修改后再试。')
+                else:   
+                    return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            return render.info('注册成功！<p>请妥善保存以下信息：</p><p>链地址：%s</p><p>密码字符串：\n%s</p>'%\
+                (r1['data']['chain_addr'], r1['data']['mystery']),'/admin/user')
+            #else:
+            #    return render.info('用户名已存在！请修改后重新添加。')
         else:
             raise web.seeother('/')
-
 
 
 class AdminStatus: 
@@ -319,22 +317,19 @@ class AdminStatus:
             render = create_render()
         
             uptime=os.popen('uptime').readlines()
-            takit=os.popen('pgrep -f "uwsgi_fair.sock"').readlines()
+            takit=os.popen('pgrep -f "uwsgi_*.sock"').readlines()
             error_log=os.popen('tail %s/error.log' % setting.logs_path).readlines()
             uwsgi_log=os.popen('tail %s/uwsgi_fair.log' % setting.logs_path).readlines()
             processor_log=os.popen('tail %s/processor.log' % setting.logs_path).readlines()
             df_data=os.popen('df -h').readlines()
 
-            #import sms_mwkj
-            #balance = sms_mwkj.query_balance()
-
             return render.status(session.uname, user_level[session.privilege],{
-                'uptime'       :  uptime,
-                'takit'     :  takit,
-                'error_log' :  error_log,
-                'uwsgi_log' :  uwsgi_log,
-                'process_log'  :  processor_log,
-                'df_data'     :  df_data})
+                'uptime'      : uptime,
+                'takit'       : takit,
+                'error_log'   : error_log,
+                'uwsgi_log'   : uwsgi_log,
+                'process_log' : processor_log,
+                'df_data'     : df_data})
         else:
             raise web.seeother('/')
 
@@ -343,37 +338,17 @@ class AdminData:
         if logged(helper.PRIV_ADMIN):
             render = create_render()
     
-            db_active=db.user.find({'$and': [{'login'    : 1},
-                             {'privilege' : helper.PRIV_USER},
-                            ]},
-                            {'_id':1}).count()
-            db_nonactive=db.user.find({'$and': [{'login'     : 0},
-                             {'privilege' : helper.PRIV_USER},
-                            ]},
-                            {'_id':1}).count()
-            db_admin=db.user.find({'privilege' : helper.PRIV_ADMIN}, {'_id':1}).count()
-
-            db_sessions=db.sessions.find({}, {'_id':1}).count()
-            db_device=db.device.find({}, {'_id':1}).count()
-            db_todo=db.todo.find({}, {'_id':1}).count()
-            db_sleep=db.todo.find({'status':'SLEEP'}, {'_id':1}).count()
-            db_lock=db.todo.find({'lock':1}, {'_id':1}).count()
-            db_thread=db.thread.find({}).sort([('tname',1)])
-            idle_time = []
-            for t in db_thread:
-                idle_time.append(t)
-
             return render.data(session.uname, user_level[session.privilege],
                 {
-                  'active'     :  db_active,
-                  'nonactive'   :  db_nonactive,
-                  'admin'       :  db_admin,
-                  'sessions'     :  db_sessions,
-                  'device'     :  db_device,
-                  'todo'         :  db_todo,
-                  'sleep'       :  db_sleep,
-                  'lock'         :  db_lock,
-                  'idle_time'   :  idle_time,
+                  'active'    : 0,
+                  'nonactive' : 0,
+                  'admin'     : 0,
+                  'sessions'  : 0,
+                  'device'    : 0,
+                  'todo'      : 0,
+                  'sleep'     : 0,
+                  'lock'      : 0,
+                  'idle_time' : 0,
                 })
         else:
             raise web.seeother('/')
