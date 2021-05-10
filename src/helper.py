@@ -36,11 +36,10 @@ PRIV_ART     = 0b10000000
 # 菜单权限
 MENU_LEVEL = {
     'ADMIN' : 1,   # 平台管理员
-    'TRD'   : 2,   # 交易者
-    'AH'    : 3,   # 拍卖行
-    'DEL'   : 4,   # 经销商
-    'REV'   : 5,   # 评论家
-    'ART'   : 6,   # 艺术家
+    'ITEM'  : 2,   # 物品管理
+    'AUC'   : 3,   # 拍卖管理
+    'TRANS' : 4,   # 交易管理
+    'REV'   : 5,   # 评论管理
 }
 
 user_level = {
@@ -64,6 +63,9 @@ def set_session(s):
 
 def get_session_uname():
     return web_session.uname
+
+def get_session_addr():
+    return web_session.uid
 
 #----------------------------------------
 

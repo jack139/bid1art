@@ -1,0 +1,44 @@
+$def with (name, str1, addr, items, page, has_next)
+
+$var title: 所有艺术品
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #trdd2
+$var addr: $addr
+
+<div class="caption"><h2>所有艺术品</h2></div>
+
+<p><a class="abtn" href="/item/add">添加艺术品</a></p>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>id</th>
+            <th>名称</th>
+            <th>图片</th>
+            <th>状态</th>
+        </tr>
+</thead>
+<tbody>
+
+$for u in items:
+    <tr>
+    <td>$u[0]</td>
+    <td><a href="/item/edit?item_id=$u[0]">$u[1]</a></td>
+    <td></td>
+    <td>$u[2]</td>
+    </tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    $if page > 1:
+        <a href="/item/list?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+    $if has_next:
+        <a href="/item/list?page=$(page+1)">后一页</a>
+</div>

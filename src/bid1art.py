@@ -128,21 +128,24 @@ class Login:
                     ((r1['code'], r1['msg']) if r1 else ('', '')))
 
             name = r1['data']['user']['login_name']
+
             # 不同用户权限
+            menu_pri = []
             if r1['data']['user']['user_type'] in ['TRD', 'DEL', 'ART']:
                 privilege = helper.PRIV_TRD
-                pos = helper.MENU_LEVEL['TRD']
-                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+                menu_pri = ['ITEM']
             elif r1['data']['user']['user_type'] == 'AH':
                 privilege = helper.PRIV_AH
-                pos = helper.MENU_LEVEL['AH']
-                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
-                pos = helper.MENU_LEVEL['REV'] # 拍卖行也有评论权限
-                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+                menu_pri = ['AUC', 'TRANS', 'REV']
             elif r1['data']['user']['user_type'] == 'REV':
                 privilege = helper.PRIV_REV
-                pos = helper.MENU_LEVEL['REV']
+                menu_pri = ['REV']
+
+            for p in menu_pri:
+                pos = helper.MENU_LEVEL[p]
                 menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+            print(menu_level)
+
 
         # 设置session
         session.login = 1
