@@ -16,12 +16,10 @@ all: clean $(TARGETS)
 $(TARGETS):
 	@echo "Compiling ..."
 	@cp -r $(SRC) $(TARGETS)
-	@cat $(TARGETS)/app_settings.py >> $(TARGETS)/app_helper.py
 	-$(PY) $(TARGETS)
 	@find $(TARGETS) -name '*.py' -delete
 	@find $(TARGETS) -name "__pycache__" |xargs rm -rf
 	@rm $(TARGET_CONF)/setting.pyc
-	@rm $(TARGETS)/app_settings.pyc
 	@cp $(SRC_CONF)/setting.py $(TARGET_CONF)
 
 js:

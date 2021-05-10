@@ -10,7 +10,7 @@ from decimal import Decimal
 from config.url import urls
 from config import setting
 from config.redissession import RedisStore
-import helper, app_helper
+import helper
 from libs import rand_code
 
 from helper import get_privilege_name
@@ -73,7 +73,7 @@ class Login:
             signup=0
 
             # 生成验证码
-            rand=app_helper.my_rand(4).upper()
+            rand=helper.my_rand(4).upper()
             session.uid = rand # uid 临时存放验证码
             session.menu_level = 0 # 暂存输入验证码次数
             png2 = rand_code.gen_rand_png(rand)

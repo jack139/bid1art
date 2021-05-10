@@ -1,20 +1,17 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 
 # 后台界面公用变量及函数
 
 import web
-import time, datetime, os
+import time, datetime, os, random
 import re
 from config import setting
-from app_helper import IS_TEST
-
-db = setting.db_web
 
 web_session = None
 
-ISOTIMEFORMAT=['%Y-%m-%d %X', '%Y-%m-%d', '%Y%m%d']
+
+ISOTIMEFORMAT=['%Y-%m-%d %X', '%Y-%m-%d', '%Y%m%d', '%Y%m%d%H%M', '%Y-%m-%d %H:%M']
 
 def time_str(t=None, format=0):
     return time.strftime(ISOTIMEFORMAT[format], time.localtime(t))
@@ -87,9 +84,14 @@ def get_privilege_name(privilege=None, menu_level=None):
                 name.append(k)
     return name
 
-def my_rand(n=5):
-    import random
-    return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz') for ch in range(n)])
+
+RAND_BASE=[
+    'abcdefghijklmnopqrstuvwxyz',
+    '0123456789',
+]
+
+def my_rand(n=4, base=0):
+    return ''.join([random.choice(RAND_BASE[base]) for ch in range(n)])
 
 def logged(privilege = -1, menu_level=None):
     if web_session.login==1:
