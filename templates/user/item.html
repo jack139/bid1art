@@ -1,4 +1,4 @@
-$def with (name, str1, addr, items, page, has_next)
+$def with (name, str1, addr, items, page, has_next, cols=4)
 
 $var title: 所有艺术品
 $var css:
@@ -15,21 +15,26 @@ $var addr: $addr
 <table class="props_tb">
 <thead>
         <tr class="even">
-            <th>id</th>
-            <th>名称</th>
-            <th>图片</th>
-            <th>状态</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
 </thead>
 <tbody>
 
-$for u in items:
-    <tr>
-    <td>$u[0]</td>
-    <td><a href="/item/edit?item_id=$u[0]">$u[1]</a></td>
-    <td></td>
-    <td>$u[2]</td>
-    </tr>
+<tr>
+$for i,u in enumerate(items):
+    <td>
+        <div><a href="/item/info?item_id=$u[0]">
+            <img src="/static/image/wood-box.png" width="150">
+        </a></div>
+        <div>$u[1]</div>
+        <div>$u[2]</div>
+    </td>
+    $if (i+1)%cols==0:
+        </tr><tr>
+</tr>
 
 </tbody>
 </table>
