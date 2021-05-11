@@ -1,11 +1,11 @@
-$def with (name, str1, addr, items, page, has_next, cols=4)
+$def with (name, str1, addr, items, page, has_next, is_myitem, cols=4)
 
 $var title: 所有艺术品
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu: #trdd2
+$var menu: $("#trdd1" if is_myitem>0 else "#trdd2")
 $var addr: $addr
 
 <div class="caption"><h2>所有艺术品</h2></div>
@@ -26,7 +26,7 @@ $var addr: $addr
 <tr>
 $for i,u in enumerate(items):
     <td>
-        <div><a href="/item/info?item_id=$u[0]">
+        <div><a href="/item/info?item_id=$u[0]&is_myitem=$is_myitem">
             <img src="/static/image/wood-box.png" width="150">
         </a></div>
         <div>$u[1]</div>
@@ -42,8 +42,14 @@ $for i,u in enumerate(items):
 <br/>
 <div class="article_box">
     $if page > 1:
-        <a href="/item/list?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+        $if is_myitem>0:
+            <a href="/item/list?page=$(page-1)&owner=$addr">前一页</a>&nbsp;&nbsp;
+        $else:
+            <a href="/item/list?page=$(page-1)">前一页</a>&nbsp;&nbsp;
     &nbsp;&nbsp;- $page -&nbsp;&nbsp;
     $if has_next:
-        <a href="/item/list?page=$(page+1)">后一页</a>
+        $if is_myitem>0:
+            <a href="/item/list?page=$(page+1)&owner=$addr">后一页</a>
+        $else:
+            <a href="/item/list?page=$(page+1)">后一页</a>
 </div>
