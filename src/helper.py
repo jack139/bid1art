@@ -27,6 +27,7 @@ def validateEmail(email):
 # 用户等级
 PRIV_VISITOR = 0b00000000
 PRIV_ADMIN   = 0b00000001
+PRIV_OP      = 0b00000010
 PRIV_TRD     = 0b00001000
 PRIV_AH      = 0b00010000
 PRIV_DEL     = 0b00100000
@@ -35,16 +36,22 @@ PRIV_ART     = 0b10000000
 
 # 菜单权限
 MENU_LEVEL = {
-    'ADMIN' : 1,   # 平台管理员
-    'ITEM'  : 2,   # 物品管理
-    'AUC'   : 3,   # 拍卖管理
-    'TRANS' : 4,   # 交易管理
-    'REV'   : 5,   # 评论管理
+    'ADMIN'    : 1,   # 平台管理员
+    'ITEM'     : 2,   # 物品管理
+    'AUC'      : 3,   # 拍卖操作
+    'TRANS'    : 4,   # 交易操作
+    'REV'      : 5,   # 评论操作
+    'AUC_OP'   : 6,   # 拍卖管理
+    'TRANS_OP' : 7,   # 交易管理
+    'REV_OP'   : 8,   # 评论管理
+    'ITEM_OP'  : 9,   # 物品管理
+    'USER_OP'  : 10,  # 用户管理
 }
 
 user_level = {
     PRIV_VISITOR  : '访客',
     PRIV_ADMIN    : '管理员',
+    PRIV_OP       : '平台管理员',
     PRIV_AH       : '拍卖行', 
     PRIV_TRD      : '交易者',  
     PRIV_DEL      : '经销商', 
@@ -76,9 +83,9 @@ def get_privilege_name(privilege=None, menu_level=None):
 
     name = ['?']
     p = int(privilege)
-    if p==PRIV_ADMIN:
-        return user_level[PRIV_ADMIN]
-    if p&(PRIV_TRD|PRIV_AH|PRIV_DEL|PRIV_REV|PRIV_ART):
+    #if p==PRIV_ADMIN:
+    #    return user_level[PRIV_ADMIN]
+    if p&(PRIV_ADMIN|PRIV_OP|PRIV_TRD|PRIV_AH|PRIV_DEL|PRIV_REV|PRIV_ART):
         if menu_level==None:
             menu_level = web_session.menu_level  # '----X--X----XXX---'
         for k in MENU_LEVEL.keys():
@@ -129,7 +136,7 @@ def create_render(plain=False, globals={}, force_visitor=False):
             render = web.template.render('templates/user', base=layout, globals=globals)
         elif privilege&PRIV_AH:
             render = web.template.render('templates/super', base=layout, globals=globals)
-        elif privilege&PRIV_ADMIN:
+        elif privilege&(PRIV_ADMIN|PRIV_OP):
             render = web.template.render('templates/admin', base=layout, globals=globals)
         else:
             render = web.template.render('templates/visitor', base=layout, globals=globals)

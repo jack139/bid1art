@@ -131,15 +131,18 @@ class Login:
 
             # 不同用户权限
             menu_pri = []
-            if r1['data']['user']['user_type'] in ['TRD', 'DEL', 'ART']:
+            user_type = r1['data']['user']['user_type'].split('|')
+            menu_pri = user_type[1:]
+            if user_type[0] in ['TRD', 'DEL', 'ART']:
                 privilege = helper.PRIV_TRD
-                menu_pri = ['ITEM']
-            elif r1['data']['user']['user_type'] == 'AH':
+            elif user_type[0] == 'AH':
                 privilege = helper.PRIV_AH
-                menu_pri = ['AUC', 'TRANS', 'REV']
-            elif r1['data']['user']['user_type'] == 'REV':
+            elif user_type[0] == 'REV':
                 privilege = helper.PRIV_REV
-                menu_pri = ['REV']
+            elif user_type[0] == 'OP': # 平台管理
+                privilege = helper.PRIV_OP
+            else:
+                return render.login_error('用户权限错误！')
 
             for p in menu_pri:
                 pos = helper.MENU_LEVEL[p]

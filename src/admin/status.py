@@ -15,7 +15,7 @@ url = ('/admin/status')
 
 class handler:
     def GET(self):
-        if logged(helper.PRIV_ADMIN):
+        if logged(helper.PRIV_ADMIN|helper.PRIV_OP):
             render = create_render()
         
             uptime=os.popen('uptime').readlines()

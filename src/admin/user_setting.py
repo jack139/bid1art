@@ -16,7 +16,7 @@ url = ('/admin/user_setting')
 
 class handler:
     def GET(self):
-        if logged(helper.PRIV_ADMIN):
+        if logged(helper.PRIV_ADMIN|helper.PRIV_OP, 'USER_OP'):
             render = create_render()
             user_data=web.input(uid='')
 
@@ -36,7 +36,7 @@ class handler:
             raise web.seeother('/')
 
     def POST(self):
-        if logged(helper.PRIV_ADMIN):
+        if logged(helper.PRIV_ADMIN|helper.PRIV_OP, 'USER_OP'):
             render = create_render()
             user_data=web.input(chain_addr='', bank_acc_name='', 
                 bank_name='', bank_acc_no='', address='', phone='', email='')

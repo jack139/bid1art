@@ -3,7 +3,7 @@ $def with (name, str1, users, page, has_next)
 $var title: 用户管理
 $var css:
 $var js:
-$var name: $str1 $name
+$var name: $'|'.join(str1) $name
 
 <div class="caption"><h2>用户管理</h2></div>
 

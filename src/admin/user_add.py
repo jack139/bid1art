@@ -16,14 +16,14 @@ url = ('/admin/user_add')
 
 class handler:
     def GET(self):
-        if logged(helper.PRIV_ADMIN):
+        if logged(helper.PRIV_ADMIN|helper.PRIV_OP, 'USER_OP'):
             render = create_render()
             return render.user_new(helper.get_session_uname(), helper.get_privilege_name())
         else:
             raise web.seeother('/')
 
     def POST(self):
-        if logged(helper.PRIV_ADMIN):
+        if logged(helper.PRIV_ADMIN|helper.PRIV_OP, 'USER_OP'):
             render = create_render()
             user_data=web.input(login_name='', user_type='', bank_acc_name='', 
                 bank_name='', bank_acc_no='', address='', phone='', email='', referrer='')
@@ -32,10 +32,21 @@ class handler:
             if user_data.login_name=='':
                 return render.info('用户名不能为空！')  
 
+            if user_data['user_type']=='OP':
+                user_type = 'OP|ITEM_OP|REV_OP|USER_OP'
+            elif user_data['user_type'] in ['TRD', 'DEL', 'ART']:
+                user_type = user_data['user_type']+'|ITEM|AUC|TRANS'
+            elif user_data['user_type']=='AH':
+                user_type = 'AH|AUC_OP|TRANS_OP'
+            elif user_data['user_type']=='REV':
+                user_type = 'REV|REV'
+            else:
+                return render.info('用户类型错误！')
+
             # 链上新建用户
             r1 = fork_api('/biz/user/register', {
                 'login_name'    : user_data['login_name'],
-                'user_type'     : user_data['user_type'],
+                'user_type'     : user_type,
                 'bank_acc_name' : user_data['bank_acc_name'],
                 'bank_name'     : user_data['bank_name'],
                 'bank_acc_no'   : user_data['bank_acc_no'],

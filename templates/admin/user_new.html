@@ -3,7 +3,7 @@ $def with (name, str1)
 $var title: 添加用户
 $var css:
 $var js:
-$var name: $str1 $name
+$var name: $'|'.join(str1) $name
 
 <div class="caption"><h2>添加用户</h2></div>
 
@@ -25,6 +25,7 @@ $var name: $str1 $name
 		<option value="DEL">经销商 (DEL)</option>
 		<option value="ART">艺术家 (ART)</option>
 		<option value="REV">评论家 (REV)</option>
+		<option value="OP">平台管理员 (OP)</option>
 	</select>
 </td></tr>
 <tr><td>银行开户姓名</td><td class="t_l"><input type="text" name="bank_acc_name" value=""/></td></tr>

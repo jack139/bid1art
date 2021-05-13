@@ -17,7 +17,7 @@ PAGE_SIZE = 20
 
 class handler:
     def GET(self):
-        if logged(helper.PRIV_ADMIN):
+        if logged(helper.PRIV_ADMIN|helper.PRIV_OP, 'USER_OP'):
             user_data=web.input(page='1')
             render = create_render()
 
