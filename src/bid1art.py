@@ -86,6 +86,7 @@ class Login:
         passwd = ' '.join(passwd.split()) # 去掉回车，只间隔一个空格
         name=''
         menu_level = 60*'-'
+        menu_pri = []
 
         render = create_render()
 
@@ -115,8 +116,7 @@ class Login:
         if chainaddr==setting.SYS_ADMIN: # 管理员
             privilege = helper.PRIV_ADMIN
             name = 'admin'
-            pos = helper.MENU_LEVEL['ADMIN']
-            menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+            menu_pri=['ADMIN', 'USER_OP']
 
         else:
             # 获取用户信息
@@ -144,10 +144,10 @@ class Login:
             else:
                 return render.login_error('用户权限错误！')
 
-            for p in menu_pri:
-                pos = helper.MENU_LEVEL[p]
-                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
-            print(menu_level)
+        for p in menu_pri:
+            pos = helper.MENU_LEVEL[p]
+            menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+        print(menu_level)
 
 
         # 设置session

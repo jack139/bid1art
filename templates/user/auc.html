@@ -1,0 +1,53 @@
+$def with (name, str1, addr, aucs, page, has_next, is_myitem, cols=4)
+
+$var title: 所有拍卖
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: $("#auct1" if is_myitem>0 else "#auct2")
+$var addr: $addr
+
+<div class="caption"><h2>所有拍卖</h2></div>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+</thead>
+<tbody>
+
+<tr>
+$for i,u in enumerate(aucs):
+    <td>
+        <div><a href="/auc/info?auc_id=$u[0]&is_myauc=$is_myauc">
+            <img src="/static/image/wood-box.png" width="150">
+        </a></div>
+        <div>$u[1]</div>
+        <div>$u[2]</div>
+    </td>
+    $if (i+1)%cols==0:
+        </tr><tr>
+</tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    $if page > 1:
+        $if is_myitem>0:
+            <a href="/auc/list?page=$(page-1)&owner=$addr">前一页</a>&nbsp;&nbsp;
+        $else:
+            <a href="/auc/list?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+    $if has_next:
+        $if is_myitem>0:
+            <a href="/auc/list?page=$(page+1)&owner=$addr">后一页</a>
+        $else:
+            <a href="/auc/list?page=$(page+1)">后一页</a>
+</div>

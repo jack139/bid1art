@@ -46,7 +46,8 @@ MAX_DISPATCHER_WORKERS = 8
 
 ############ chain setting
 
-SYS_ADMIN = "bid1art16prc7wqzqu7v4g2lc5dwnhf4xa6n38eupk2h7y"
+#SYS_ADMIN = "bid1art16prc7wqzqu7v4g2lc5dwnhf4xa6n38eupk2h7y"
+SYS_ADMIN = "bid1art12lwse2xym4vsv9cn633m5ge7y5f4wz0f6tscc2"  # home env
 
 CHAIN_API_HOST = "127.0.0.1"
 CHAIN_API_PORT = "8888"
