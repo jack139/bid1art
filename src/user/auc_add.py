@@ -34,9 +34,16 @@ class handler:
         if r1['data']['item']['owner_addr']!=helper.get_session_addr():
             return render.info('只有所有人可以发起拍卖！')
 
+        # 获取拍卖行信息
+        r2 = fork_api('/query/auction_house/list', {})
+        if (r2 is None) or r2['code']!=0:
+            return render.info('出错了，请联系管理员！(%s %s)'%\
+                ((r2['code'], r2['msg']) if r2 else ('', '')))
+
+
         render = helper.create_render()
         return render.auc_new(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(), 
-            r1['data']['item'])
+            r1['data']['item'], r2['data']['ah_list'])
 
 
     def POST(self):
@@ -55,10 +62,10 @@ class handler:
 
         # 链上新建用户
         r1 = fork_api('/biz/auction/new', {
-            'seller_addr'    : user_data['seller_addr'],
-            'auc_house_id'   : user_data['auc_house_id'],
-            'item_id'        : user_data['item_id'],
-            'reserved_price' : user_data['reserved_price'],
+            'seller_addr'      : user_data['owner_addr'],
+            'auction_house_id' : user_data['auc_house_id'],
+            'item_id'          : user_data['item_id'],
+            'reserved_price'   : user_data['reserved_price'],
         })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))

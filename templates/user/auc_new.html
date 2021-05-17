@@ -1,4 +1,4 @@
-$def with (name, str1, addr, item)
+$def with (name, str1, addr, item, ah_list)
 
 $var title: 新增拍卖
 $var css:
@@ -23,7 +23,12 @@ $var addr: $addr
 </thead>
 <tbody>
 <tr><td>物品名称</td><td class="t_l">$item['desc']</td></tr>
-<tr><td>拍卖行id</td><td class="t_l"><input type="text" name="auc_house_id" value="" size="80"/></td></tr>
+<tr><td>拍卖行id</td><td class="t_l">
+	<select name="auc_house_id">
+		$for i in ah_list:
+			<option value="$i['chain_addr']">$i['login_name']</option>
+	</select>
+</td></tr>
 <tr><td>卖家id</td><td class="t_l">$addr</td></tr>
 <tr><td>底价</td><td class="t_l"><input type="text" name="reserved_price" value="" size="80"/></td></tr>
 

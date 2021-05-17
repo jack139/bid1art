@@ -34,7 +34,7 @@ class handler:
 
         items=[]
         for u in r1['data']['auction_list']:
-            items.append([u['id'],u['itemId'],u['auctionHouseId'],u['reqDate'],])
+            items.append([u['id'],u['item_id'],u['auction_house_id'],u['req_date'],])
 
         return render.auc(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
             items, int(user_data['page']), len(items)==PAGE_SIZE, len(user_data['owner']))

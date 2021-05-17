@@ -1,4 +1,4 @@
-$def with (name, str1, addr, aucs, page, has_next, is_myitem, cols=4)
+$def with (name, str1, addr, aucs, page, has_next, is_myitem)
 
 $var title: 所有拍卖
 $var css:
@@ -13,26 +13,21 @@ $var addr: $addr
 <table class="props_tb">
 <thead>
         <tr class="even">
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>id</th>
+            <th>艺术品id</th>
+            <th>申请人id</th>
+            <th>申请时间</th>
         </tr>
 </thead>
 <tbody>
 
-<tr>
-$for i,u in enumerate(aucs):
-    <td>
-        <div><a href="/auc/info?auc_id=$u[0]&is_myauc=$is_myauc">
-            <img src="/static/image/wood-box.png" width="150">
-        </a></div>
-        <div>$u[1]</div>
-        <div>$u[2]</div>
-    </td>
-    $if (i+1)%cols==0:
-        </tr><tr>
-</tr>
+$for u in aucs:
+    <tr>
+    <td><a href="/auc/info?id=$u[0]">$u[0]</a></td>
+    <td>$u[1]</td>
+    <td>$u[2]</td>
+    <td>$u[3]</td>
+    </tr>
 
 </tbody>
 </table>
