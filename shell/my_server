@@ -1,20 +1,17 @@
 #!/bin/sh
 
-BNB_DIR="/usr/share/nginx/html/bnb"
+BID_DIR="/usr/share/nginx/html/bid1art"
 LOG_PATH="/var/log/nginx"
 
 start_web() {
-        uwsgi  -s /tmp/uwsgi_bnb.sock -C -M -p 1 -t 15 --limit-as 1024 -R 1000 --uid nobody --gid nobody \
-               -d $LOG_PATH"/uwsgi_bnb.log" --pidfile /tmp/uwsgi_bnb.pid --pythonpath $BNB_DIR
-        uwsgi  -s /tmp/uwsgi_wx.sock -C -M -p 2 -t 60 --limit-as 1024 -R 1000 --uid nobody --gid nobody \
-               -d $LOG_PATH"/uwsgi_wx.log" --pidfile /tmp/uwsgi_wx.pid --pythonpath $BNB_DIR \
-               --stats 127.0.0.1:1717 --stats-http --memory-report --harakiri-verbose
+        uwsgi  -s /tmp/uwsgi_bid1art.sock -C -M -p 1 -t 15 --limit-as 1024 -R 1000 --uid nobody --gid nobody \
+               -d $LOG_PATH"/uwsgi_bid1art.log" --pidfile /tmp/uwsgi_bid1art.pid --pythonpath $BID_DIR
 	nginx
 	return 0
 }
 
 start_back() {
-	nohup python3 $BNB_DIR"/daemon.pyc" $BNB_DIR $LOG_PATH >> $LOG_PATH"/daemon.log" &
+	#nohup python3 $BNB_DIR"/daemon.pyc" $BID_DIR $LOG_PATH >> $LOG_PATH"/daemon.log" &
 	return 0 
 }
 
@@ -27,14 +24,13 @@ stop_web() {
 }
 
 stop_back() {
-        kill -9 `pgrep -f "daemon.py"`
-        kill -9 `pgrep -f "dispatcher.py"`
-	kill -9 `pgrep -f "gotalk"`
+        #kill -9 `pgrep -f "daemon.py"`
+        #kill -9 `pgrep -f "dispatcher.py"`
     	return 0
 }
 
 status() {
-	ps -f -C uwsgi -C nginx -C python3 -C gotalk
+	ps -f -C uwsgi -C nginx -C python3 
     	return 0
 }
 
