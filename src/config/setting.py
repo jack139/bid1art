@@ -3,7 +3,7 @@ import web
 
 
 #####
-debug_mode = True   # Flase - production, True - staging
+debug_mode = False   # Flase - production, True - staging
 #####
 #
 enable_proxy = True
