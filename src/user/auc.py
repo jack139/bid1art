@@ -17,7 +17,7 @@ class handler:
         if not helper.logged(helper.PRIV_TRD|helper.PRIV_DEL|helper.PRIV_ART, 'AUC'):
             raise web.seeother('/')
 
-        user_data=web.input(page='1', owner='')
+        user_data=web.input(page='1', seller='')
         render = helper.create_render()
 
         if not user_data['page'].isdigit():
@@ -27,15 +27,11 @@ class handler:
         r1 = fork_api('/query/auction/list', {
             'page'  : int(user_data['page']),
             'limit' : PAGE_SIZE,
-            'owner_addr' : user_data['owner'],
+            'seller_addr' : user_data['seller'],
         })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
-        items=[]
-        for u in r1['data']['auction_list']:
-            items.append([u['id'],u['item_id'],u['auction_house_id'],u['req_date'],])
-
         return render.auc(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            items, int(user_data['page']), len(items)==PAGE_SIZE, len(user_data['owner']))
-
+            r1['data']['auction_list'], int(user_data['page']), 
+            len(r1['data']['auction_list'])==PAGE_SIZE, len(user_data['seller']))

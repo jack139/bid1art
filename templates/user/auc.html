@@ -13,20 +13,20 @@ $var addr: $addr
 <table class="props_tb">
 <thead>
         <tr class="even">
-            <th>id</th>
+            <th>申请时间</th>
             <th>艺术品id</th>
             <th>申请人id</th>
-            <th>申请时间</th>
+            <th>状态</th>
         </tr>
 </thead>
 <tbody>
 
 $for u in aucs:
     <tr>
-    <td><a href="/auc/info?id=$u[0]">$u[0]</a></td>
-    <td>$u[1]</td>
-    <td>$u[2]</td>
-    <td>$u[3]</td>
+    <td><a href="/auc/info?id=$u['id']">$u['req_date']</a></td>
+    <td>$u['item_id']</td>
+    <td>$u['seller_addr']</td>
+    <td>$u['status']</td>
     </tr>
 
 </tbody>
@@ -34,15 +34,11 @@ $for u in aucs:
 
 <br/>
 <div class="article_box">
-    $if page > 1:
-        $if is_myitem>0:
-            <a href="/auc/list?page=$(page-1)&owner=$addr">前一页</a>&nbsp;&nbsp;
-        $else:
+    $if is_myitem==0:
+        $if page > 1:
             <a href="/auc/list?page=$(page-1)">前一页</a>&nbsp;&nbsp;
-    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
-    $if has_next:
-        $if is_myitem>0:
-            <a href="/auc/list?page=$(page+1)&owner=$addr">后一页</a>
-        $else:
+        &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+        $if has_next:
             <a href="/auc/list?page=$(page+1)">后一页</a>
+
 </div>
