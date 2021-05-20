@@ -27,7 +27,7 @@ class handler:
             render = create_render()
             user_data=web.input(login_name='', user_type='', bank_acc_name='', 
                 bank_name='', bank_acc_no='', address='', phone='', email='', referrer='')
-            print(user_data)
+            #print(user_data)
 
             if user_data.login_name=='':
                 return render.info('用户名不能为空！')  
@@ -45,6 +45,7 @@ class handler:
 
             # 链上新建用户
             r1 = fork_api('/biz/user/register', {
+                'caller_addr'   : helper.get_session_addr(),
                 'login_name'    : user_data['login_name'],
                 'user_type'     : user_type,
                 'bank_acc_name' : user_data['bank_acc_name'],

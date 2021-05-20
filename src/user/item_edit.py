@@ -45,8 +45,8 @@ class handler:
 
         # 链上修改用户信息
         r1 = fork_api('/biz/item/modify', {
+            'caller_addr': helper.get_session_addr(),
             'id'         : user_data['item_id'],
-            'owner_addr' : user_data['owner_addr'],
             'desc'       : user_data['desc'],
             'detail'     : user_data['detail'],
             'date'       : user_data['date'],

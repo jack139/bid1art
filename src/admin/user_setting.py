@@ -46,6 +46,7 @@ class handler:
 
             # 链上修改用户信息
             r1 = fork_api('/biz/user/modify', {
+                'caller_addr'   : helper.get_session_addr(),
                 'chain_addr'    : user_data['chain_addr'],
                 'bank_acc_name' : user_data['bank_acc_name'],
                 'bank_name'     : user_data['bank_name'],

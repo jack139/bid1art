@@ -41,3 +41,10 @@ $if addr==item['owner_addr']:
 &nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
 </div>
 
+<div class="article_box">
+  <div>修改历史：</div>
+  <textarea rows="8" cols="100" id="history">
+  $for h in item['last_date']:
+      $h['date']，用户：$h['caller']，操作：$h['act']；
+  </textarea>
+</div>

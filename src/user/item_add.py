@@ -34,6 +34,7 @@ class handler:
 
         # 链上新建用户
         r1 = fork_api('/biz/item/new', {
+            'caller_addr'  : helper.get_session_addr(),
             'owner_addr'   : user_data['owner_addr'],
             'desc'         : user_data['desc'],
             'detail'       : user_data['detail'],

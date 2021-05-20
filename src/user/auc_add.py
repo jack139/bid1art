@@ -62,7 +62,8 @@ class handler:
 
         # 链上新建用户
         r1 = fork_api('/biz/auction/new', {
-            'seller_addr'      : user_data['owner_addr'],
+            'caller_addr'      : helper.get_session_addr(),
+            'seller_addr'      : helper.get_session_addr(),
             'auction_house_id' : user_data['auc_house_id'],
             'item_id'          : user_data['item_id'],
             'reserved_price'   : user_data['reserved_price'],
