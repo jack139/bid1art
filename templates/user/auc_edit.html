@@ -1,0 +1,45 @@
+$def with (name, str1, addr, auc, item, ah_list)
+
+$var title: 修改拍卖信息
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #auct2
+$var addr: $addr
+
+<div class="caption"><h2>修改拍卖信息</h2></div>
+
+<form name="settings" method="post" action="/auc/edit">
+<input type="hidden" name="auc_id" value="$auc['id']" />
+<input type="hidden" name="seller_addr" value="$auc['seller_addr']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>物品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>卖家id</td><td class="t_l">$auc['seller_addr']</td></tr>
+<tr><td>拍卖行id</td><td class="t_l">
+	<select name="auc_house_id">
+		$for i in ah_list:
+			<option value="$i['chain_addr']"
+				$if auc['auction_house_id']==i['chain_addr']:
+					selected="selected" 
+			>$i['login_name'] ($i['chain_addr'])</option>
+	</select>
+</td></tr>
+<tr><td>底价</td><td class="t_l"><input type="text" name="reserved_price" value="$auc['reserved_price']" size="80"/></td></tr>
+
+</tbody>
+</table>
+
+<p><input type="submit" name="button" id="button" value="提交" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
+
+</form>

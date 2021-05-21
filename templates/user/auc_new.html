@@ -5,13 +5,12 @@ $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu: #trdd2
+$var menu: #auct2
 $var addr: $addr
 
 <div class="caption"><h2>新增拍卖申请</h2></div>
 
 <form name="settings" method="post" action="/auc/add">
-<input type="hidden" name="owner_addr" value="$item['owner_addr']" />
 <input type="hidden" name="item_id" value="$item['id']" />
 
 <table class="props_tb">
@@ -23,13 +22,13 @@ $var addr: $addr
 </thead>
 <tbody>
 <tr><td>物品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>卖家id</td><td class="t_l">$addr</td></tr>
 <tr><td>拍卖行id</td><td class="t_l">
 	<select name="auc_house_id">
 		$for i in ah_list:
-			<option value="$i['chain_addr']">$i['login_name']</option>
+			<option value="$i['chain_addr']">$i['login_name'] ($i['chain_addr'])</option>
 	</select>
 </td></tr>
-<tr><td>卖家id</td><td class="t_l">$addr</td></tr>
 <tr><td>底价</td><td class="t_l"><input type="text" name="reserved_price" value="" size="80"/></td></tr>
 
 </tbody>

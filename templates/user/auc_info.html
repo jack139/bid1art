@@ -35,7 +35,7 @@ $var addr: $addr
 
 <div class="article_box">
 $if addr==auc['seller_addr'] and auc['status']=='WAIT':
-	<a class="btn" href="/auc/edit?auc_id=$item['id']">修改拍卖申请</a>
+	<a class="btn" href="/auc/edit?auc_id=$auc['id']">修改拍卖申请</a>
 &nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
 </div>
 
