@@ -1,20 +1,22 @@
-$def with (name, str1, users)
+$def with (name, str1, addr, users)
 
 $var title: 用户审核
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #plat1
+$var addr: $addr
 
 <div class="caption"><h2>用户审核</h2></div>
-
 
 <table class="props_tb">
 <thead>
         <tr class="even">
-            <th>链地址</th>
-            <th>用户名</th>
-            <th>用户类型</th>
-            <th>注册日期</th>
+            <th>用户链地址</th>
+            <th>用户名称</th>
+            <th>类型</th>
+            <th>注册时间</th>
             <th>状态</th>
         </tr>
 </thead>
@@ -22,11 +24,11 @@ $var name: $'|'.join(str1) $name
 
 $for u in users:
     <tr>
-    <td><a href="/admin/user_audit_info?uid=$u[1]">$u[1]</a></td>
-    <td>$u[0]</td>
-    <td>$u[2]</td>
-    <td>$u[3]</td>
-    <td>$u[4]</td>
+    <td><a href="/plat/user_audit_edit?uid=$u['chain_addr']">$u['chain_addr']</a></td>
+    <td>$u['login_name']</td>
+    <td>$u['user_type']</td>
+    <td>$u['reg_date']</td>
+    <td>$u['status']</td>
     </tr>
 
 </tbody>

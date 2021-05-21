@@ -86,4 +86,4 @@ class handler:
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
-        return render.info('成功保存！','/admin/user')
+        return render.info('成功保存！','/auc/list')
