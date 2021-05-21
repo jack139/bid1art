@@ -134,9 +134,9 @@ def create_render(plain=False, globals={}, force_visitor=False):
     if logged():
         if privilege&(PRIV_TRD|PRIV_DEL|PRIV_ART|PRIV_REV):
             render = web.template.render('templates/user', base=layout, globals=globals)
-        elif privilege&PRIV_AH:
+        elif privilege&(PRIV_AH|PRIV_OP):
             render = web.template.render('templates/super', base=layout, globals=globals)
-        elif privilege&(PRIV_ADMIN|PRIV_OP):
+        elif privilege&PRIV_ADMIN:
             render = web.template.render('templates/admin', base=layout, globals=globals)
         else:
             render = web.template.render('templates/visitor', base=layout, globals=globals)
