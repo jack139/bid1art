@@ -1,0 +1,37 @@
+$def with (name, str1, addr, items)
+
+$var title: 艺术品审核
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #plat2
+$var addr: $addr
+
+<div class="caption"><h2>艺术品审核</h2></div>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>艺术品名称</th>
+            <th>类型</th>
+            <th>年代</th>
+            <th>价格</th>
+            <th>状态</th>
+        </tr>
+</thead>
+<tbody>
+
+$for u in items:
+    <tr>
+    <td><a href="/plat/item_audit_edit?item_id=$u['id']">$u['desc']</a></td>
+    <td>$u['type']</td>
+    <td>$u['date']</td>
+    <td>$u['base_price']</td>
+    <td>$u['status']</td>
+    </tr>
+
+</tbody>
+</table>
+
+<br/>
