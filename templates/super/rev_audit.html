@@ -1,0 +1,35 @@
+$def with (name, str1, addr, revs)
+
+$var title: 评论审核
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #plat3
+$var addr: $addr
+
+<div class="caption"><h2>评论审核</h2></div>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>艺术品名称</th>
+            <th>评论时间</th>
+            <th>评论者链地址</th>
+            <th>状态</th>
+        </tr>
+</thead>
+<tbody>
+
+$for u in revs:
+    <tr>
+    <td><a href="/plat/rev_audit_edit?rev_id=$u['id']">$u['item_id']</a></td>
+    <td>$u['review_date']</td>
+    <td>$u['reviewer_addr']</td>
+    <td>$u['status']</td>
+    </tr>
+
+</tbody>
+</table>
+
+<br/>

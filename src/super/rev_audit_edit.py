@@ -6,25 +6,25 @@ import helper
 
 from chain_api import fork_api
 
-# 审核艺术品
+# 审核评论
 
-url = ('/plat/item_audit_edit')
+url = ('/plat/rev_audit_edit')
 
 
 class handler:
     def GET(self):
-        if not helper.logged(helper.PRIV_OP, 'ITEM_OP'):
+        if not helper.logged(helper.PRIV_OP, 'REV_OP'):
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input(item_id='')
+        user_data=web.input(rev_id='')
 
-        if user_data.item_id=='':
+        if user_data.rev_id=='':
             return render.info('错误的参数！')  
 
         # 获取用户信息
-        r1 = fork_api('/query/item/info', {
-            'id' : user_data.item_id,
+        r1 = fork_api('/query/review/info', {
+            'id' : user_data.rev_id,
         })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请联系管理员！(%s %s)'%\
@@ -38,26 +38,26 @@ class handler:
         ]
 
         return render.item_audit_edit(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            r1['data']['item'], status_list)
+            r1['data']['review'], status_list)
 
 
     def POST(self):
-        if not helper.logged(helper.PRIV_OP, 'ITEM_OP'):
+        if not helper.logged(helper.PRIV_OP, 'REV_OP'):
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input(item_id='', status='')
+        user_data=web.input(rev_id='', status='')
 
-        if '' in [user_data.item_id, user_data.status]:
+        if '' in [user_data.rev_id, user_data.status]:
             return render.info('参数错误！')  
 
         # 链上修改用户信息
-        r1 = fork_api('/biz/audit/item', {
+        r1 = fork_api('/biz/audit/review', {
             'caller_addr': helper.get_session_addr(),
-            'id'         : user_data['item_id'],
+            'id'         : user_data['rev_id'],
             'status'     : user_data['status'],
         })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
-        return render.info('成功保存！','/plat/item_audit')
+        return render.info('成功保存！','/plat/rev_audit')
