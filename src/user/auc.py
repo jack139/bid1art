@@ -10,7 +10,6 @@ from chain_api import fork_api
 
 url = ('/auc/list')
 
-PAGE_SIZE = 8
 
 class handler:
     def GET(self):
@@ -26,7 +25,7 @@ class handler:
         # 链上数据
         r1 = fork_api('/query/auction/list', {
             'page'  : int(user_data['page']),
-            'limit' : PAGE_SIZE,
+            'limit' : setting.PAGE_SIZE,
             'seller_addr' : user_data['seller'],
         })
         if (r1 is None) or r1['code']!=0:
@@ -34,4 +33,4 @@ class handler:
 
         return render.auc(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
             r1['data']['auction_list'], int(user_data['page']), 
-            len(r1['data']['auction_list'])==PAGE_SIZE, len(user_data['seller']))
+            len(r1['data']['auction_list'])==setting.PAGE_SIZE, len(user_data['seller']))

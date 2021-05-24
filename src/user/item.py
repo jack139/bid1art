@@ -10,7 +10,7 @@ from chain_api import fork_api
 
 url = ('/item/list')
 
-PAGE_SIZE = 8
+
 
 class handler:
     def GET(self):
@@ -26,7 +26,7 @@ class handler:
         # 链上数据
         r1 = fork_api('/query/item/list', {
             'page'  : int(user_data['page']),
-            'limit' : PAGE_SIZE,
+            'limit' : setting.PAGE_SIZE,
             'owner_addr' : user_data['owner'],
         })
         if (r1 is None) or r1['code']!=0:
@@ -37,5 +37,5 @@ class handler:
             items.append([u['id'],u['desc'],u['status']])
 
         return render.item(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            items, int(user_data['page']), len(items)==PAGE_SIZE, len(user_data['owner']))
+            items, int(user_data['page']), len(items)==setting.PAGE_SIZE, len(user_data['owner']))
 

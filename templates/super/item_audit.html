@@ -1,4 +1,4 @@
-$def with (name, str1, addr, items)
+$def with (name, str1, addr, items, page, has_next)
 
 $var title: 艺术品审核
 $var css:
@@ -35,3 +35,11 @@ $for u in items:
 </table>
 
 <br/>
+
+<div class="article_box">
+    $if page > 1:
+        <a href="/plat/item_audit?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+    $if has_next:
+        <a href="/plat/item_audit?page=$(page+1)">后一页</a>
+</div>
