@@ -14,8 +14,9 @@ url = ('/item/list')
 
 class handler:
     def GET(self):
-        if not helper.logged(helper.PRIV_TRD|helper.PRIV_DEL|helper.PRIV_ART, 'ITEM'):
-            raise web.seeother('/')
+        if not helper.logged(helper.PRIV_TRD|helper.PRIV_DEL|helper.PRIV_ART|helper.PRIV_REV, 'ITEM'):
+            if not helper.logged(helper.PRIV_REV, 'REV'): # REV 可以浏览
+                raise web.seeother('/')
 
         user_data=web.input(page='1', owner='')
         render = helper.create_render()

@@ -13,7 +13,8 @@ url = ('/item/info')
 class handler:
     def GET(self):
         if not helper.logged(helper.PRIV_TRD|helper.PRIV_DEL|helper.PRIV_ART, 'ITEM'):
-            raise web.seeother('/')
+            if not helper.logged(helper.PRIV_REV, 'REV'): # REV 可以浏览
+                raise web.seeother('/')
 
         render = helper.create_render()
         user_data=web.input(item_id='')

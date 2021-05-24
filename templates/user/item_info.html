@@ -13,10 +13,10 @@ $var addr: $addr
 
 <table class="props_tb">
 <thead>
-        <tr class="even">
-            <th>项目</th>
-            <th>内容</th>
-        </tr>
+    <tr class="even">
+        <th>项目</th>
+        <th>内容</th>
+    </tr>
 </thead>
 <tbody>
 
@@ -36,15 +36,18 @@ $var addr: $addr
 
 <div class="article_box">
 $if addr==item['owner_addr']:
-	<a class="btn" href="/item/edit?item_id=$item['id']">修改艺术品信息</a>
-	<a class="btn" href="/auc/add?item_id=$item['id']">申请拍卖</a>
+    <a class="btn" href="/item/edit?item_id=$item['id']">修改艺术品信息</a>
+    <a class="btn" href="/auc/add?item_id=$item['id']">申请拍卖</a>
+$if u'REV' in str1:
+    <a class="btn" href="/review/add?item_id=$item['id']">添加评论</a>
+
 &nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
 </div>
 
 <div class="article_box">
-  <div>修改历史：</div>
-  <textarea rows="8" cols="100" id="history">
-  $for h in item['last_date']:
-      $h['date']，用户：$h['caller']，操作：$h['act']；
-  </textarea>
+    <div>修改历史：</div>
+    <textarea rows="8" cols="100" id="history">
+    $for h in item['last_date']:
+        $h['date']，用户：$h['caller']，操作：$h['act']；
+    </textarea>
 </div>
