@@ -30,5 +30,15 @@ class handler:
             return render.info('出错了，请联系管理员！(%s %s)'%\
                 ((r1['code'], r1['msg']) if r1 else ('', '')))
 
+        # 获取评论信息
+        r2 = fork_api('/query/review/list', {
+            'item_id' : user_data.item_id,
+            'page'    : 1,
+            'limit'   : 1000,
+        })
+        if (r2 is None) or r2['code']!=0:
+            return render.info('出错了，请联系管理员！(%s %s)'%\
+                ((r2['code'], r2['msg']) if r2 else ('', '')))
+
         return render.item_info(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            r1['data']['item'])
+            r1['data']['item'], r2['data']['review_list'])

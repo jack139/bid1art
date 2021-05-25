@@ -1,0 +1,35 @@
+$def with (name, str1, addr, rev, item)
+
+$var title: 修改评论
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #trdd2
+$var addr: $addr
+
+<div class="caption"><h2>修改评论</h2></div>
+
+<form name="settings" method="post" action="/rev/edit">
+<input type="hidden" name="rev_id" value="$rev['id']" />
+<input type="hidden" name="item_id" value="$rev['item_id']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>物品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>评论内容</td><td class="t_l"><textarea rows="10" cols="80" name="detail">$rev['detail']</textarea></td></tr>
+
+</tbody>
+</table>
+
+<p><input type="submit" name="button" id="button" value="提交" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
+
+</form>
