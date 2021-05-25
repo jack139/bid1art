@@ -42,7 +42,7 @@ $var addr: $addr
     $for r in rev_list:
         <div>评论人：$r['reviewer_addr'] 
             $if u'REV' in str1:
-                <a class="btn" href="/rev/edit?rev_id=$r['id']">修改评论</a>
+                <a class="btn" href="/rev/edit?rev_id=$r['id']&item_id=$r['item_id']">修改评论</a>
         </div>
         <div>评论时间：$r['review_date']</div>
         <textarea rows="5" cols="100" id="history" readonly="readonly">$r['detail']</textarea>

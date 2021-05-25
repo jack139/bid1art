@@ -51,7 +51,7 @@ def fork_api(api_uri, data_para={}):
     
     start_time = datetime.now()
     r = pool.urlopen('POST', url, body=body)
-    print('[Time taken: {!s}]'.format(datetime.now() - start_time))
+    print('[Time taken: {1!s} - {0}]'.format(api_uri, datetime.now() - start_time))
 
     print(r.status)
     if r.status==200:

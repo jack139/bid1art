@@ -17,14 +17,15 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input(rev_id='')
+        user_data=web.input(rev_id='', item_id='')
 
-        if user_data.rev_id=='':
+        if '' in (user_data.rev_id, user_data.item_id):
             return render.info('错误的参数！')  
 
         # 获取评论信息
         r1 = fork_api('/query/review/info', {
-            'id' : user_data.rev_id,
+            'id'      : user_data.rev_id,
+            'item_id' : user_data.item_id,
         })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请联系管理员！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
@@ -56,7 +57,8 @@ class handler:
 
         # 获取评论信息
         r1 = fork_api('/query/review/info', {
-            'id' : user_data.auc_id,
+            'id'      : user_data.rev_id,
+            'item_id' : user_data.item_id,
         })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请联系管理员！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
