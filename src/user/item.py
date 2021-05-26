@@ -25,11 +25,18 @@ class handler:
             return render.info('page参数错误！')  
 
         # 链上数据
-        r1 = fork_api('/query/item/list', {
-            'page'  : int(user_data['page']),
-            'limit' : setting.PAGE_SIZE,
-            'owner_addr' : user_data['owner'],
-        })
+        if len(user_data['owner'])>0: # 指定owner的所有艺术品
+            r1 = fork_api('/query/item/list', {
+                'page'  : int(user_data['page']),
+                'limit' : setting.PAGE_SIZE,
+                'owner_addr' : user_data['owner'],
+            })
+        else: # 不限owner, 非 WAIT的
+            r1 = fork_api('/query/item/list_by_status', {
+                'page'  : int(user_data['page']),
+                'limit' : setting.PAGE_SIZE,
+                'status' : 'ACTIVE|ONBID', # 显示 正常的 和 竞标中 的
+            })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
