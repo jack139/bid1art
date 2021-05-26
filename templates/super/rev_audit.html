@@ -23,7 +23,7 @@ $var addr: $addr
 
 $for u in revs:
     <tr>
-    <td><a href="/plat/rev_audit_edit?rev_id=$u['id']">$u['item_id']</a></td>
+    <td><a href="/plat/rev_audit_edit?rev_id=$u['id']&item_id=$u['item_id']">$u['item_id']</a></td>
     <td>$u['review_date']</td>
     <td>$u['reviewer_addr']</td>
     <td>$u['status']</td>

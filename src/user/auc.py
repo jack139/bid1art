@@ -23,11 +23,18 @@ class handler:
             return render.info('page参数错误！')  
 
         # 链上数据
-        r1 = fork_api('/query/auction/list', {
-            'page'  : int(user_data['page']),
-            'limit' : setting.PAGE_SIZE,
-            'seller_addr' : user_data['seller'],
-        })
+        if len(user_data['seller'])>0: # 发起者自己可以看到所有状态的自己的拍卖
+            r1 = fork_api('/query/auction/list', {
+                'page'  : int(user_data['page']),
+                'limit' : setting.PAGE_SIZE,
+                'seller_addr' : user_data['seller'],
+            })
+        else:
+            r1 = fork_api('/query/auction/list_by_status', {
+                'page'  : int(user_data['page']),
+                'limit' : setting.PAGE_SIZE,
+                'status' : 'ACTIVE|INIT|OPEN|CLOSE', # 可显示的状态
+            })            
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 

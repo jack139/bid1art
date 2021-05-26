@@ -22,7 +22,7 @@ class handler:
         if user_data.item_id=='':
             return render.info('错误的参数！')  
 
-        # 获取用户信息
+        # 获取艺术品信息
         r1 = fork_api('/query/item/info', {
             'id' : user_data.item_id,
         })
@@ -33,6 +33,7 @@ class handler:
         # 获取评论信息
         r2 = fork_api('/query/review/list', {
             'item_id' : user_data.item_id,
+            'status'  : 'ACTIVE',
             'page'    : 1,
             'limit'   : 1000,
         })

@@ -1,4 +1,4 @@
-$def with (name, str1, addr, rev, status_list)
+$def with (name, str1, addr, rev, item, status_list)
 
 $var title: 审核评论状态
 $var css:
@@ -12,6 +12,7 @@ $var addr: $addr
 
 <form name="settings" method="post" action="/plat/rev_audit_edit">
 <input type="hidden" name="rev_id" value="$rev['id']" />
+<input type="hidden" name="item_id" value="$rev['item_id']" />
 
 <table class="props_tb">
 <thead>
@@ -22,8 +23,9 @@ $var addr: $addr
 </thead>
 <tbody>
 
-<tr><td>艺术品名称</td><td class="t_l">$rev['item_id']</td></tr>
-<tr><td>评论内容</td><td class="t_l">$rev['detail']</td></tr>
+<tr><td>艺术品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>评论内容</td><td class="t_l">
+  <textarea rows="5" cols="80" id="history" readonly="readonly">$rev['detail']</textarea></td></tr>
 <tr><td>评论时间</td><td class="t_l">$rev['review_date']</td></tr>
 <tr><td>评论者链地址</td><td class="t_l">$rev['reviewer_addr']</td></tr>
 <tr><td>状态</td><td class="t_l">
@@ -40,7 +42,7 @@ $var addr: $addr
 </table>
 
 <p><input type="submit" name="button" id="button" value="提交" />
-<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
+<input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" /></p>
 
 </form>
 
