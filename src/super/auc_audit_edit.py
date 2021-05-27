@@ -59,6 +59,9 @@ class handler:
         if '' in (user_data.auc_id, user_data.open_date, user_data.close_date, user_data.status):
             return render.info('参数错误！')  
 
+        if user_data.open_date > user_data.close_date:
+            return render.info('拍卖开始时间不能大于拍卖截止时间！')  
+
         # 链上修改用户信息
         r1 = fork_api('/biz/audit/auction', {
             'caller_addr': helper.get_session_addr(),

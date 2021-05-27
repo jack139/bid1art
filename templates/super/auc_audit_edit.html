@@ -1,12 +1,29 @@
 $def with (name, str1, addr, auc, item, status_list)
 
 $var title: 审核拍卖申请状态
-$var css:
-$var js:
+$var css: /static/css/jquery.datetimepicker.css
+$var js: /static/js/jquery.datetimepicker.js
 $var name: $'|'.join(str1) $name
-$var load: 
+$var load: first_do()
 $var menu: #auct1
 $var addr: $addr
+
+<script type="text/javascript">
+function first_do(){
+    $$('#open_date').datetimepicker({
+        format     : 'Y-m-d H:i', 
+        minDate    : '+1970-01-01',
+        yearStart : 2021,
+        yearEnd : 2035,
+    });
+    $$('#close_date').datetimepicker({
+        format     : 'Y-m-d H:i', 
+        minDate    : '+1970-01-01',
+        yearStart : 2021,
+        yearEnd : 2035,
+    });
+}
+</script>
 
 <div class="caption"><h2>审核拍卖申请状态</h2></div>
 
@@ -27,16 +44,20 @@ $var addr: $addr
 <tr><td>申请者链地址</td><td class="t_l">$auc['seller_addr']</td></tr>
 <tr><td>拍卖行链地址</td><td class="t_l">$auc['auction_house_id']</td></tr>
 <tr><td>拍卖底价</td><td class="t_l">$auc['reserved_price']</td></tr>
-<tr><td>拍卖开始日期</td><td class="t_l"><input type="text" name="open_date" value="" size="80"/></td></tr>
-<tr><td>拍卖截止日期</td><td class="t_l"><input type="text" name="close_date" value="" size="80"/></td></tr>
+<tr><td>拍卖开始日期</td><td class="t_l">
+    <input type="text" id="open_date" name="open_date" value="$auc['open_date']" readonly="readonly" />
+</td></tr>
+<tr><td>拍卖截止日期</td><td class="t_l">
+    <input type="text" id="close_date" name="close_date" value="$auc['close_date']" readonly="readonly"/>
+</td></tr>
 <tr><td>状态</td><td class="t_l">
-	<select name="status">
-		$for i in status_list:
-			<option value="$i[0]"
-				$if auc['status']==i[0]:
-					selected="selected" 
-			>$i[1] ($i[0])</option>
-	</select>
+    <select name="status">
+        $for i in status_list:
+            <option value="$i[0]"
+                $if auc['status']==i[0]:
+                    selected="selected" 
+            >$i[1] ($i[0])</option>
+    </select>
 </td></tr>
 
 </tbody>
