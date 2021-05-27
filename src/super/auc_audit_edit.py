@@ -57,7 +57,7 @@ class handler:
         user_data=web.input(auc_id='', open_date='', close_date='', status='')
 
         if '' in (user_data.auc_id, user_data.open_date, user_data.close_date, user_data.status):
-            return render.info('参数错误！')  
+            return render.info('拍卖起始日期不能为空！')  
 
         if user_data.open_date > user_data.close_date:
             return render.info('拍卖开始时间不能大于拍卖截止时间！')  
