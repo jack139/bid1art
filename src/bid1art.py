@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # 本地调试
-# uwsgi --http 127.0.0.1:8000  --wsgi-file bid1art.py --check-static ../
+# uwsgi --http 127.0.0.1:8000  --wsgi-file bid1art.py
 
 import web
 import os, sys, gc
