@@ -30,6 +30,10 @@ class handler:
             return render.info('出错了，请联系管理员！(%s %s)'%\
                 ((r1['code'], r1['msg']) if r1 else ('', '')))
 
+        # 检查是否可修改
+        if r1['data']['item']['status'] not in ('WAIT', 'ACTIVE', 'NOGO'):
+            return render.info('目前艺术品的状态，不能修改艺术品信息！')              
+
         return render.item_edit(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
             r1['data']['item'])
 
@@ -42,6 +46,18 @@ class handler:
 
         if '' in [user_data.owner_addr, user_data.item_id]:
             return render.info('参数错误！')  
+
+        # 获取用户信息
+        r1 = fork_api('/query/item/info', {
+            'id' : user_data.item_id,
+        })
+        if (r1 is None) or r1['code']!=0:
+            return render.info('出错了，请联系管理员！(%s %s)'%\
+                ((r1['code'], r1['msg']) if r1 else ('', '')))
+
+        # 检查是否可修改
+        if r1['data']['item']['status'] not in ('WAIT', 'ACTIVE', 'NOGO'):
+            return render.info('目前艺术品的状态，不能修改艺术品信息！')              
 
         # 链上修改用户信息
         r1 = fork_api('/biz/item/modify', {

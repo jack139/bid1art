@@ -56,13 +56,18 @@ class handler:
         render = helper.create_render()
         user_data=web.input(auc_id='', open_date='', close_date='', status='')
 
-        if '' in (user_data.auc_id, user_data.open_date, user_data.close_date, user_data.status):
-            return render.info('拍卖起始日期不能为空！')  
+        if '' in (user_data.auc_id, user_data.status):
+            return render.info('参数错误！')  
 
-        if user_data.open_date > user_data.close_date:
-            return render.info('拍卖开始时间不能大于拍卖截止时间！')  
+        if user_data.status=='INIT':
+            if '' in (user_data.open_date, user_data.close_date):
+                return render.info('拍卖起始日期不能为空！')  
 
-        # 链上修改用户信息
+            if user_data.open_date > user_data.close_date:
+                return render.info('拍卖开始时间不能大于拍卖截止时间！')  
+
+
+        # 链上修改拍卖状态
         r1 = fork_api('/biz/audit/auction', {
             'caller_addr': helper.get_session_addr(),
             'id'         : user_data['auc_id'],
@@ -72,5 +77,23 @@ class handler:
         })
         if (r1 is None) or r1['code']!=0:
             return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+
+        if user_data.status=='INIT':
+            # 获取用户信息
+            r1 = fork_api('/query/auction/info', {
+                'id' : user_data.auc_id,
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请联系管理员！(%s %s)'%\
+                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            # 链上修改艺术品状态信息
+            r1 = fork_api('/biz/audit/item', {
+                'caller_addr': helper.get_session_addr(),
+                'id'         : r1['data']['auction']['item_id'],
+                'status'     : 'ONBID',
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
         return render.info('成功保存！','/plat/auc_audit')

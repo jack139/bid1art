@@ -34,6 +34,10 @@ class handler:
         if r1['data']['item']['owner_addr']!=helper.get_session_addr():
             return render.info('只有所有人可以发起拍卖！')
 
+        # 检查艺术品状态
+        if r1['data']['item']['status']!='ACTIVE':
+            return render.info('艺术品状态不是ACTIVE，不能申请拍卖！')
+
         # 获取拍卖行信息
         r2 = fork_api('/query/auction_house/list', {})
         if (r2 is None) or r2['code']!=0:
@@ -66,6 +70,10 @@ class handler:
         # 检查发起者是否是艺术品所有人
         if r1['data']['item']['owner_addr']!=helper.get_session_addr():
             return render.info('只有艺术品所有人可以发起拍卖！')
+
+        # 检查艺术品状态
+        if r1['data']['item']['status']!='ACTIVE':
+            return render.info('艺术品状态不是ACTIVE，不能申请拍卖！')
 
         # 链上新建用户
         r1 = fork_api('/biz/auction/new', {
