@@ -1,4 +1,4 @@
-$def with (name, str1, settings)
+$def with (name, str1, settings, status_list)
 
 $var title: 用户设置
 $var css:
@@ -28,6 +28,15 @@ $var name: $'|'.join(str1) $name
 <tr><td>联系电话</td><td class="t_l"><input type="text" name="phone" value="$settings['phone']"/></td></tr>
 <tr><td>电子邮件</td><td class="t_l"><input type="text" name="email" value="$settings['email']"/></td></tr>
 <tr><td>推荐人链地址</td><td class="t_l">$settings['referrer']</td></tr>
+<tr><td>状态</td><td class="t_l">
+	<select name="status">
+		$for i in status_list:
+			<option value="$i[0]"
+				$if settings['status']==i[0]:
+					selected="selected" 
+			>$i[1] ($i[0])</option>
+	</select>
+</td></tr>
 
 </tbody>
 </table>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # 本地调试
-# uwsgi --http 127.0.0.1:8000  --wsgi-file bid1art.py
+# uwsgi --http 127.0.0.1:8000  --wsgi-file bid1art.py --check-static ../
 
 import web
 import os, sys, gc
@@ -66,8 +66,21 @@ def my_crypt(codestr):
 class Login:
     def GET(self):
         if logged():
+            news = []
+
+            # 获取用户信息
+            r1 = fork_api('/query/user/info', {
+                'chain_addr' : session.uid,
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.login_error('出错了，请联系管理员！(%s %s)'%\
+                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            if r1['data']['user']['status']!='ACTIVE':
+                news.append('您的账户状态未激活，目前状态为 %s, 请联系管理员审核。'%r1['data']['user']['status'])
+
             render = create_render()
-            return render.portal(session.uname, get_privilege_name(), session.uid)
+            return render.portal(session.uname, get_privilege_name(), session.uid, news)
         else:
             render = create_render()
             signup=0
@@ -117,7 +130,7 @@ class Login:
             privilege = helper.PRIV_ADMIN
             name = 'admin'
             menu_pri=['ADMIN', 'USER_OP']
-
+            status = 'ACTIVE'
         else:
             # 获取用户信息
             r1 = fork_api('/query/user/info', {
@@ -144,9 +157,12 @@ class Login:
             else:
                 return render.login_error('用户权限错误！')
 
-        for p in menu_pri:
-            pos = helper.MENU_LEVEL[p]
-            menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
+            status = r1['data']['user']['status']
+
+        if status=='ACTIVE': # 只有活动状态用户才给权限
+            for p in menu_pri:
+                pos = helper.MENU_LEVEL[p]
+                menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
         print(menu_level)
 
 

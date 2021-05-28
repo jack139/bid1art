@@ -31,7 +31,15 @@ class handler:
                 return render.info('出错了，请联系管理员！(%s %s)'%\
                     ((r1['code'], r1['msg']) if r1 else ('', '')))
 
-            return render.user_setting(helper.get_session_uname(), helper.get_privilege_name(), r1['data']['user'])
+            status_list = [
+                ('WAIT', '待审核'),
+                ('ACTIVE', '正常使用'),
+                ('NOGO', '审核不通过'),
+                ('LOCK', '锁定'),
+            ]
+
+            return render.user_setting(helper.get_session_uname(), helper.get_privilege_name(), 
+                r1['data']['user'], status_list)
         else:
             raise web.seeother('/')
 
@@ -39,7 +47,7 @@ class handler:
         if logged(helper.PRIV_ADMIN|helper.PRIV_OP, 'USER_OP'):
             render = create_render()
             user_data=web.input(chain_addr='', bank_acc_name='', 
-                bank_name='', bank_acc_no='', address='', phone='', email='')
+                bank_name='', bank_acc_no='', address='', phone='', email='', status='')
 
             if user_data.chain_addr=='':
                 return render.info('参数错误！')  
@@ -54,6 +62,15 @@ class handler:
                 'address'       : user_data['address'],
                 'phone'         : user_data['phone'],
                 'email'         : user_data['email'],
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            # 链上修改用户信息
+            r1 = fork_api('/biz/audit/user', {
+                'caller_addr': helper.get_session_addr(),
+                'chain_addr' : user_data['chain_addr'],
+                'status'     : user_data['status'],
             })
             if (r1 is None) or r1['code']!=0:
                 return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))

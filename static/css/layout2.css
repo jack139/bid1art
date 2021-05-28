@@ -142,6 +142,7 @@ button::-moz-focus-inner{ border:0; padding:0; margin:0; }
 .article_box h3{ font-size:22px; font-weight:400; font-family:arial; line-height:30px; margin-bottom:10px; color:#000; border-bottom:1px dotted #999; display:inline-block; }
 .article_box p{ padding-bottom:20px; }
 .article_box b{ color:#000; }
+.article_box .red{ color:#f00; }
 .article_box .highlight{ padding:0 5px; background:#f0f0f0; }
 .article_box .btn{ padding:0 18px; height:20px; line-height:20px; background:#eaeaea; font-family:"Microsoft yahei",arial; font-size:11px; outline:none; color:#333; text-decoration:none; border:1px solid #acacac; display:inline-block; }
 .article_box .btn:hover{ background:#e0effc; text-decoration:none; }
