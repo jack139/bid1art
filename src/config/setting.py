@@ -12,7 +12,7 @@ thread_num = 1
 
 tmp_path = '/usr/local/nginx/html/xah/static/tmp'
 logs_path = '/usr/local/nginx/logs'
-image_store_path = '/usr/local/nginx/html/xah/static/image/product'
+image_store_path = '../static/image/product'
 
 
 http_port=8000
