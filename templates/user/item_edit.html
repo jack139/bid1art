@@ -44,7 +44,7 @@ $else:
             $for i in item['image']:
                 $if len(i)>0:
                   <li id="$(i.replace('.','_'))" style="width: 450px;">
-                    <img src="/static/image/product/$(i[:2])/$i"/>
+                    <img src="/plat/get_image?hash=$i"/>
                     <button onclick="remove_image('$(i.replace('.','_'))');return false;">删除</button>
                   </li>
     </ul>

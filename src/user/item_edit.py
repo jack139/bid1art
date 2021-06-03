@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-import web
+import web 
+import os, base64
 from config import setting
 import helper
 
@@ -70,6 +71,9 @@ class handler:
             if (r1 is None) or r1['code']!=0:
                 return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
+            # 填充已生成的 item_id
+            user_data['item_id'] = r1['data']['id']
+
         else:
             if user_data.owner_addr=='':
                 return render.info('参数错误！') 
@@ -102,5 +106,28 @@ class handler:
             if (r1 is None) or r1['code']!=0:
                 return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
+
+        # 上传图片
+        image_list = user_data['image'].split(',')
+        for im in image_list:
+            if len(im)==46 and '.' not in im: # ipfs 标记
+                continue
+
+            with open(os.path.join(setting.image_store_path, im[:2], im), 'rb') as f:
+                img_data = f.read()
+            img_data = base64.b64encode(img_data).decode('utf-8')
+
+            # 上传照片
+            r1 = fork_api('/ipfs/upload/image', {
+                'caller_addr': helper.get_session_addr(),
+                'item_id'    : user_data['item_id'],
+                'image'      : img_data,
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+
+            print("hash", r1['data']['hash'])
+
+        # TODO: 处理删除图片的情况！
 
         return render.info('成功保存！','/item/list')
