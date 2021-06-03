@@ -28,7 +28,10 @@ $if u'ITEM' in str1:
 $for i,u in enumerate(items):
     <td>
         <div><a href="/item/info?item_id=$u[0]&is_myitem=$is_myitem">
-            <img src="/static/image/wood-box.png" width="150">
+            $if len(u[3])>0:
+                <img src="/plat/get_image?hash=$u[3][0]" width="150" />
+            $else:
+                <img src="/static/image/wood-box.png" width="150" />
         </a></div>
         <div>$u[1]</div>
         <div>$u[2]</div>

@@ -46,7 +46,7 @@ function doFirst_pic()
     r9.assignBrowse($('#picBrowseButton')[0], false);
 
     r9.on('fileAdded', function(file, event){
-        if (file.size>1024*1024*1){
+        if (file.size>1024*1024*5){
             r9.cancel();
             alertify.error("文件大小不能超过1M");
         }else if (!!file.file.type.match(/image.*/)){
