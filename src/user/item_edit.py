@@ -108,25 +108,26 @@ class handler:
 
 
         # 上传图片
-        image_list = user_data['image'].split(',')
-        for im in image_list:
-            if len(im)==46 and '.' not in im: # ipfs 标记
-                continue
+        if len(user_data['image'])>0:
+            image_list = user_data['image'].split(',')
+            for im in image_list:
+                if len(im)==46 and '.' not in im: # ipfs 标记
+                    continue
 
-            with open(os.path.join(setting.image_store_path, im[:2], im), 'rb') as f:
-                img_data = f.read()
-            img_data = base64.b64encode(img_data).decode('utf-8')
+                with open(os.path.join(setting.image_store_path, im[:2], im), 'rb') as f:
+                    img_data = f.read()
+                img_data = base64.b64encode(img_data).decode('utf-8')
 
-            # 上传照片
-            r1 = fork_api('/ipfs/upload/image', {
-                'caller_addr': helper.get_session_addr(),
-                'item_id'    : user_data['item_id'],
-                'image'      : img_data,
-            })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+                # 上传照片
+                r1 = fork_api('/ipfs/upload/image', {
+                    'caller_addr': helper.get_session_addr(),
+                    'item_id'    : user_data['item_id'],
+                    'image'      : img_data,
+                })
+                if (r1 is None) or r1['code']!=0:
+                    return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
-            print("hash", r1['data']['hash'])
+                print("hash", r1['data']['hash'])
 
         # TODO: 处理删除图片的情况！
 
