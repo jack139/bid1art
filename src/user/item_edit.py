@@ -74,7 +74,12 @@ class handler:
             # 填充已生成的 item_id
             user_data['item_id'] = r1['data']['id']
 
+            # 需上传的图片
+            add_image_list = user_data['image'].split(',') if len(user_data['image'])>0 else []
+            rm_image_list = []
+
         else:
+
             if user_data.owner_addr=='':
                 return render.info('参数错误！') 
 
@@ -91,7 +96,7 @@ class handler:
                 return render.info('目前艺术品的状态，不能修改艺术品信息！')              
 
             # 链上修改用户信息
-            r1 = fork_api('/biz/item/modify', {
+            r2 = fork_api('/biz/item/modify', {
                 'caller_addr': helper.get_session_addr(),
                 'id'         : user_data['item_id'],
                 'desc'       : user_data['desc'],
@@ -103,32 +108,44 @@ class handler:
                 'size'       : user_data['size'],
                 'base_price' : user_data['base_price'],
             })
+            if (r2 is None) or r2['code']!=0:
+                return render.info('出错了，请稍后再试！(%s %s)'%((r2['code'], r2['msg']) if r2 else ('', '')))
+
+            # 处理图片
+            old_image_list = r1['data']['item']['image']
+            new_image_list = user_data['image'].split(',') if len(user_data['image'])>0 else []
+            add_image_list = list(set(new_image_list) - set(old_image_list))
+            rm_image_list = list(set(old_image_list) - set(new_image_list))
+
+        # 上传图片
+        for im in add_image_list:
+            if len(im)==46 and '.' not in im: # ipfs 标记
+                continue
+
+            with open(os.path.join(setting.image_store_path, im[:2], im), 'rb') as f:
+                img_data = f.read()
+            img_data = base64.b64encode(img_data).decode('utf-8')
+
+            # 上传照片
+            r1 = fork_api('/ipfs/upload/image', {
+                'caller_addr': helper.get_session_addr(),
+                'item_id'    : user_data['item_id'],
+                'image'      : img_data,
+            })
             if (r1 is None) or r1['code']!=0:
                 return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
 
+            print("hash", r1['data']['hash'])
 
-        # 上传图片
-        if len(user_data['image'])>0:
-            image_list = user_data['image'].split(',')
-            for im in image_list:
-                if len(im)==46 and '.' not in im: # ipfs 标记
-                    continue
-
-                with open(os.path.join(setting.image_store_path, im[:2], im), 'rb') as f:
-                    img_data = f.read()
-                img_data = base64.b64encode(img_data).decode('utf-8')
-
-                # 上传照片
-                r1 = fork_api('/ipfs/upload/image', {
-                    'caller_addr': helper.get_session_addr(),
-                    'item_id'    : user_data['item_id'],
-                    'image'      : img_data,
-                })
-                if (r1 is None) or r1['code']!=0:
-                    return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
-
-                print("hash", r1['data']['hash'])
-
-        # TODO: 处理删除图片的情况！
+        # 除图片
+        for im in rm_image_list:
+            r1 = fork_api('/ipfs/remove/image', {
+                'caller_addr': helper.get_session_addr(),
+                'item_id'    : user_data['item_id'],
+                'hash'       : im,
+            })
+            if (r1 is None) or r1['code']!=0:
+                return render.info('出错了，请联系管理员！(%s %s)'%\
+                    ((r1['code'], r1['msg']) if r1 else ('', '')))
 
         return render.info('成功保存！','/item/list')
