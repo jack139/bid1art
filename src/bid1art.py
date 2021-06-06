@@ -66,20 +66,22 @@ def my_crypt(codestr):
 class Login:
     def GET(self):
         if logged():
+            render = create_render()
+
             news = []
 
-            # 获取用户信息
-            r1 = fork_api('/query/user/info', {
-                'chain_addr' : session.uid,
-            })
-            if (r1 is None) or r1['code']!=0:
-                return render.login_error('出错了，请联系管理员！(%s %s)'%\
-                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+            if session.uid!=setting.SYS_ADMIN: # 管理员
+                # 获取用户信息
+                r1 = fork_api('/query/user/info', {
+                    'chain_addr' : session.uid,
+                })
+                if (r1 is None) or r1['code']!=0:
+                    return render.info('出错了，请联系管理员！(%s %s)'%\
+                        ((r1['code'], r1['msg']) if r1 else ('', '')))
 
-            if r1['data']['user']['status']!='ACTIVE':
-                news.append('您的账户状态未激活，目前状态为 %s, 请联系管理员审核。'%r1['data']['user']['status'])
+                if r1['data']['user']['status']!='ACTIVE':
+                    news.append('您的账户状态未激活，目前状态为 %s, 请联系管理员审核。'%r1['data']['user']['status'])
 
-            render = create_render()
             return render.portal(session.uname, get_privilege_name(), session.uid, news)
         else:
             render = create_render()

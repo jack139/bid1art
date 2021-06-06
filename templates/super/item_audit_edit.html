@@ -31,6 +31,15 @@ $var addr: $addr
 <tr><td>尺寸</td><td class="t_l">$item['size']</td></tr>
 <tr><td>最近交易价格</td><td class="t_l">$item['base_price']</td></tr>
 <tr><td>所有人链地址</td><td class="t_l">$item['owner_addr']</td></tr>
+<tr><td>图片</td><td class="t_l">
+    <ul id="image-list">
+        $for im in item['image']:
+            $if len(im)>0:
+              <li style="width: 450px;">
+                <img src="/plat/get_image?hash=$im"/>
+              </li>
+    </ul>
+</td></tr>
 <tr><td>状态</td><td class="t_l">
 	<select name="status">
 		$for i in status_list:

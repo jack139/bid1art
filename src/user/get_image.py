@@ -13,7 +13,7 @@ url = ('/plat/get_image')
 
 class handler:
     def GET(self):
-        if not helper.logged(helper.PRIV_TRD|helper.PRIV_DEL|helper.PRIV_ART):
+        if not helper.logged():
             raise web.seeother('/')
 
         render = helper.create_render()
