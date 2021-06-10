@@ -35,8 +35,10 @@ $var addr: $addr
 
 <div class="article_box">
 $if addr==auc['seller_addr'] and auc['status']=='WAIT':
-	<a class="btn" href="/auc/edit?auc_id=$auc['id']">修改拍卖申请</a>
-&nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
+    <a class="btn" href="/auc/edit?auc_id=$auc['id']">修改拍卖申请</a>
+$if addr!=auc['seller_addr'] and auc['status']=='OPEN':
+    <a class="btn" href="/bid/new?auc_id=$auc['id']">出价</a>
+&nbsp;&nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
 </div>
 
 <div class="article_box">
