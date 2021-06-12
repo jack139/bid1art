@@ -96,11 +96,15 @@ class handler:
             return render.info('出错了，请联系管理员！(%s %s)'%\
                 ((r3['code'], r3['msg']) if r3 else ('', '')))
 
+        # 检查出价必须大于底价
+        if float(user_data['bid_price'])<float(r1['data']['auction']['reserved_price']):
+            return render.info('出价必须拍卖底价！(%.2f)'%float(r1['data']['auction']['reserved_price']))
+
         # 检查出价大于最高价
         r3['data']['bid_list'] = sorted(r3['data']['bid_list'], key=lambda x: float(x['bid_price']), reverse=True)
-
-        if float(user_data['bid_price'])<float(r3['data']['bid_list'][0]['bid_price']):
-            return render.info('出价必须高于历史出价！') 
+        if len(r3['data']['bid_list'])>0:
+            if float(user_data['bid_price'])<=float(r3['data']['bid_list'][0]['bid_price']):
+                return render.info('出价必须高于历史出价！(%.2f)'%float(r3['data']['bid_list'][0]['bid_price']))
 
         # 链上新建用户
         r1 = fork_api('/biz/auction/bid', {

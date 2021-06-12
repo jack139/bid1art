@@ -49,13 +49,19 @@ class handler:
         user_data=web.input(item_id='', owner_addr='', desc='', detail='', date='', type='', 
             subject='', media='', size='', base_price='')
 
+        if '' in [user_data.owner_addr, user_data.desc, user_data.base_price]:
+            return render.info('物品名称、底价均不能为空！')  
+
+        try:
+            float(user_data.base_price)
+        except ValueError:
+            return render.info('最近交易价格必须是数字！')  
+
         print("images: ", user_data.get('image'))
 
         if user_data['item_id']=='n/a': # 新建
-            if '' in [user_data.owner_addr, user_data.desc, user_data.date]:
-                return render.info('物品名称、所有者链地址、年代均不能为空！')  
 
-            # 链上新建用户
+            # 链上新建
             r1 = fork_api('/biz/item/new', {
                 'caller_addr'  : helper.get_session_addr(),
                 'owner_addr'   : user_data['owner_addr'],
@@ -79,9 +85,7 @@ class handler:
             rm_image_list = []
 
         else:
-
-            if user_data.owner_addr=='':
-                return render.info('参数错误！') 
+            # 修改
 
             # 获取用户信息
             r1 = fork_api('/query/item/info', {

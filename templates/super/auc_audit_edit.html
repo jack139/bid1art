@@ -40,6 +40,7 @@ function first_do(){
 <tbody>
 
 <tr><td>艺术品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>艺术品状态</td><td class="t_l">$item['status']</td></tr>
 <tr><td>申请时间</td><td class="t_l">$auc['req_date']</td></tr>
 <tr><td>申请者链地址</td><td class="t_l">$auc['seller_addr']</td></tr>
 <tr><td>拍卖行链地址</td><td class="t_l">$auc['auction_house_id']</td></tr>
@@ -63,8 +64,10 @@ function first_do(){
 </tbody>
 </table>
 
-<p><input type="submit" name="button" id="button" value="提交" />
-<input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" /></p>
+<p>
+    <input type="submit" name="button" id="button" value="提交" />
+    <input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" />
+</p>
 
 </form>
 

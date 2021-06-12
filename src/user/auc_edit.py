@@ -62,6 +62,11 @@ class handler:
         if '' in [user_data.auc_id, user_data.auc_house_id, user_data.reserved_price]:
             return render.info('参数错误！')  
 
+        try:
+            float(user_data.reserved_price)
+        except ValueError:
+            return render.info('底价必须是数字！')  
+
         # 获取拍卖信息
         r1 = fork_api('/query/auction/info', {
             'id' : user_data.auc_id,
