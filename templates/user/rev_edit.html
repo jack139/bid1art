@@ -40,6 +40,6 @@ $var addr: $addr
     <div>修改历史：</div>
     <textarea rows="8" cols="100" id="history">
     $for h in rev['last_date']:
-        $h['date']，用户：$h['caller']，操作：$h['act']；
+        $h['date']，用户：$h['caller'][-8:]，操作：$h['act']；
     </textarea>
 </div>

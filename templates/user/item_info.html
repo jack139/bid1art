@@ -21,7 +21,7 @@ $var addr: $addr
 <tbody>
 
 <tr><td>名称</td><td class="t_l">$item['desc']</td></tr>
-<tr><td>所有者链地址</td><td class="t_l">$item['owner_addr']</td></tr>
+<tr><td>所有者</td><td class="t_l">$item['owner_addr'][-8:]</td></tr>
 <tr><td>描述</td><td class="t_l">$item['detail']</td></tr>
 <tr><td>年代</td><td class="t_l">$item['date']</td></tr>
 <tr><td>类型</td><td class="t_l">$item['type']</td></tr>
@@ -49,11 +49,13 @@ $var addr: $addr
     </p>
 
     $for r in rev_list:
-        <div>评论人：$r['reviewer_addr'] 
+        <div>评论人：$r['reviewer_addr'][-8:] 
             $if u'REV' in str1:
                 <a class="btn" href="/rev/edit?rev_id=$r['id']&item_id=$r['item_id']">修改评论</a>
         </div>
         <div>评论时间：$r['review_date']</div>
+        $if u'REV' in str1:
+            <div>审核状态：$r['status']</div>
         <textarea rows="5" cols="100" id="history" readonly="readonly">$r['detail']</textarea>
         <div>&nbsp;&nbsp;</div>
 </div>
@@ -74,6 +76,6 @@ $if addr==item['owner_addr']:
     <div>修改历史：</div>
     <textarea rows="8" cols="100" id="history">
     $for h in item['last_date']:
-        $h['date']，用户：$h['caller']，操作：$h['act']；
+        $h['date']，用户：$h['caller'][-8:]，操作：$h['act']；
     </textarea>
 </div>

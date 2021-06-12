@@ -28,7 +28,7 @@ $else:
 <tbody>
 
 <tr><td>名称</td><td class="t_l"><input type="text" name="desc" value="$item.get('desc')" size="80"/>*</td></tr>
-<tr><td>所有者链地址</td><td class="t_l">$item['owner_addr']</td></tr>
+<tr><td>所有者</td><td class="t_l">$item['owner_addr'][-8:]</td></tr>
 <tr><td>描述</td><td class="t_l"><textarea rows="3" cols="80" name="detail">$item.get('detail')</textarea></td></tr>
 <tr><td>年代</td><td class="t_l"><input type="text" name="date" value="$item.get('date')" size="80"/></td></tr>
 <tr><td>类型</td><td class="t_l"><input type="text" name="type" value="$item.get('type')" size="80" placeholder="原作、复制品"/></td></tr>

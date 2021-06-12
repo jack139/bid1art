@@ -15,7 +15,7 @@ $var addr: $addr
         <tr class="even">
             <th>申请时间</th>
             <th>艺术品id</th>
-            <th>申请人id</th>
+            <th>申请人</th>
             <th>状态</th>
         </tr>
 </thead>
@@ -25,7 +25,7 @@ $for u in aucs:
     <tr>
     <td><a href="/auc/info?auc_id=$u['id']">$u['req_date']</a></td>
     <td>$u['item_id']</td>
-    <td>$u['seller_addr']</td>
+    <td>$u['seller_addr'][-8:]</td>
     <td>$u['status']</td>
     </tr>
 

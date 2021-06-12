@@ -42,7 +42,7 @@ button::-moz-focus-inner{ border:0; padding:0; margin:0; }
 .top_box .user{
 	font-family:"Microsoft yahei",arial; 
 	font-size:11px;
-	color:#fff; 
+	color:#000; 
 	text-decoration:none;
 	float: right;
 	padding-right:10px;

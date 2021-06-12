@@ -30,9 +30,13 @@ class handler:
             return render.info(err)
 
         # 获取评论信息
+        if helper.logged(helper.PRIV_REV, 'REV'): # REV 可以看到未审核的评论
+            rev_status = 'ACTIVE|WAIT'
+        else:
+            rev_status = 'ACTIVE'
         r2, err = fork_api('/query/review/list', {
             'item_id' : user_data.item_id,
-            'status'  : 'ACTIVE',
+            'status'  : rev_status,
             'page'    : 1,
             'limit'   : 1000,
         })

@@ -22,11 +22,11 @@ $var addr: $addr
 </thead>
 <tbody>
 <tr><td>物品名称</td><td class="t_l">$item['desc']</td></tr>
-<tr><td>卖家id</td><td class="t_l">$addr</td></tr>
-<tr><td>拍卖行id</td><td class="t_l">
+<tr><td>卖家</td><td class="t_l">$addr[-8:]</td></tr>
+<tr><td>拍卖行</td><td class="t_l">
 	<select name="auc_house_id">
 		$for i in ah_list:
-			<option value="$i['chain_addr']">$i['login_name'] ($i['chain_addr'])</option>
+			<option value="$i['chain_addr']">$i['login_name'] ($i['chain_addr'][-8:])</option>
 	</select>
 </td></tr>
 <tr><td>底价</td><td class="t_l"><input type="text" name="reserved_price" value="" size="80"/></td></tr>
