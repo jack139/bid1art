@@ -50,7 +50,6 @@ class handler:
         if r2['data']['item']['owner_addr']==helper.get_session_addr():
             return render.info('艺术品所有人不能出价！')
 
-        render = helper.create_render()
         return render.bid_new(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(), 
             r1['data']['auction'], r2['data']['item'])
 

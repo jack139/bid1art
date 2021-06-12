@@ -30,8 +30,6 @@ class handler:
             return render.info('出错了，请联系管理员！(%s %s)'%\
                 ((r1['code'], r1['msg']) if r1 else ('', '')))
 
-
-        render = helper.create_render()
         return render.rev_new(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(), 
             r1['data']['item'])
 

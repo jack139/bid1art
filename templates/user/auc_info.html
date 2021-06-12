@@ -32,13 +32,39 @@ $var addr: $addr
 </tbody>
 </table>
 
-<div class="article_box">
-    <div>出价历史：</div>
-    <textarea rows="8" cols="100" id="bid_history">
-    $for h in bids:
-        $h['bid_time']，用户：$h['buyer_addr'][-8:]，出价：$h['bid_price']，状态：$h['status']；
-    </textarea>
-</div>
+<br/>
+
+<div>出价历史：</div>
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th width="20%">出价时间</th>
+        <th>出价人</th>
+        <th>价格</th>
+        <th>状态</th>
+        <th width="20%">操作</th>
+    </tr>
+</thead>
+<tbody>
+<tbody>
+$for u in bids:
+    <tr>
+        <td>$u['bid_time']</td>
+        <td>$u['buyer_addr'][-8:]</td>
+        <td>$u['bid_price']</td>
+        <td>$u['status']</td>
+        <td>
+            $if auc['status']=='OPEN' and u['buyer_addr']==addr and u['status']=='ACTIVE':
+                <a class="abtn"
+                   onclick="alertify.confirm('提醒！','确定要撤销吗？',\
+                   function(){window.location.href='/bid/withdraw?bid_id=$u['id']&auc_id=$auc['id']';},\
+                   function(){}).set('defaultFocus', 'cancel');return false;">撤销</a>
+        </td>
+    </tr>
+</tbody>
+</table>
+
+<br/>
 
 <div class="article_box">
 $if addr==auc['seller_addr'] and auc['status']=='WAIT':
