@@ -23,12 +23,11 @@ class handler:
             return render.info('错误的参数！')  
 
         # 获取用户信息
-        r1 = fork_api('/query/item/info', {
+        r1, err = fork_api('/query/item/info', {
             'id' : user_data.item_id,
         })
-        if (r1 is None) or r1['code']!=0:
-            return render.info('出错了，请联系管理员！(%s %s)'%\
-                ((r1['code'], r1['msg']) if r1 else ('', '')))
+        if err:
+            return render.info(err)
 
         # 检查发起者是否是艺术品所有人
         if r1['data']['item']['owner_addr']!=helper.get_session_addr():
@@ -39,10 +38,9 @@ class handler:
             return render.info('艺术品状态不是ACTIVE，不能申请拍卖！')
 
         # 获取拍卖行信息
-        r2 = fork_api('/query/auction_house/list', {})
-        if (r2 is None) or r2['code']!=0:
-            return render.info('出错了，请联系管理员！(%s %s)'%\
-                ((r2['code'], r2['msg']) if r2 else ('', '')))
+        r2, err = fork_api('/query/auction_house/list', {})
+        if err:
+            return render.info(err)
 
         return render.auc_new(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(), 
             r1['data']['item'], r2['data']['ah_list'])
@@ -64,11 +62,11 @@ class handler:
             return render.info('底价必须是数字！')  
 
         # 获取用户信息
-        r1 = fork_api('/query/item/info', {
+        r1, err = fork_api('/query/item/info', {
             'id' : user_data.item_id,
         })
-        if (r1 is None) or r1['code']!=0:
-            return render.info('出错了，请联系管理员！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+        if err:
+            return render.info(err)
 
         # 检查发起者是否是艺术品所有人
         if r1['data']['item']['owner_addr']!=helper.get_session_addr():
@@ -79,14 +77,14 @@ class handler:
             return render.info('艺术品状态不是ACTIVE，不能申请拍卖！')
 
         # 链上新建用户
-        r1 = fork_api('/biz/auction/new', {
+        r1, err = fork_api('/biz/auction/new', {
             'caller_addr'      : helper.get_session_addr(),
             'seller_addr'      : helper.get_session_addr(),
             'auction_house_id' : user_data['auc_house_id'],
             'item_id'          : user_data['item_id'],
             'reserved_price'   : user_data['reserved_price'],
         })
-        if (r1 is None) or r1['code']!=0:
-            return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+        if err:
+            return render.info(err)
 
         return render.info('提交成功！','/auc/list')

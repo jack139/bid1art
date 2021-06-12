@@ -18,7 +18,7 @@ def gen_param_str(param1):
     return '&'.join(['%s=%s'%(str(i), str(param[i])) for i in name_list if str(param[i])!=''])
 
 
-def fork_api(api_uri, data_para={}):
+def fork_api0(api_uri, data_para={}):
     body = {
         'version'   : '1',
         'sign_type' : 'SHA256', 
@@ -59,3 +59,14 @@ def fork_api(api_uri, data_para={}):
     else:
         print(r.data.decode('utf-8'))
         return None
+
+
+def fork_api(api_uri, data_para={}):
+    result = fork_api0(api_uri, data_para)
+
+    # 返回 （结果， 出错信息）
+    if (result is None) or result['code']!=0:
+        return None, '出错了，请联系管理员！(%s %s)'% \
+            ((result['code'], result['msg']) if result else ('', ''))
+    else:
+        return result, None

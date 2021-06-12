@@ -24,12 +24,11 @@ class handler:
 
         if user_data.item_id!='':
             # 获取用户信息
-            r1 = fork_api('/query/item/info', {
+            r1, err = fork_api('/query/item/info', {
                 'id' : user_data.item_id,
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请联系管理员！(%s %s)'%\
-                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             # 检查是否可修改
             if r1['data']['item']['status'] not in ('WAIT', 'ACTIVE', 'NOGO'):
@@ -62,7 +61,7 @@ class handler:
         if user_data['item_id']=='n/a': # 新建
 
             # 链上新建
-            r1 = fork_api('/biz/item/new', {
+            r1, err = fork_api('/biz/item/new', {
                 'caller_addr'  : helper.get_session_addr(),
                 'owner_addr'   : user_data['owner_addr'],
                 'desc'         : user_data['desc'],
@@ -74,8 +73,8 @@ class handler:
                 'size'         : user_data['size'],
                 'base_price'   : user_data['base_price'],
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             # 填充已生成的 item_id
             user_data['item_id'] = r1['data']['id']
@@ -88,19 +87,18 @@ class handler:
             # 修改
 
             # 获取用户信息
-            r1 = fork_api('/query/item/info', {
+            r1, err = fork_api('/query/item/info', {
                 'id' : user_data.item_id,
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请联系管理员！(%s %s)'%\
-                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             # 检查是否可修改
             if r1['data']['item']['status'] not in ('WAIT', 'ACTIVE', 'NOGO'):
                 return render.info('目前艺术品的状态，不能修改艺术品信息！')              
 
             # 链上修改用户信息
-            r2 = fork_api('/biz/item/modify', {
+            r2, err = fork_api('/biz/item/modify', {
                 'caller_addr': helper.get_session_addr(),
                 'id'         : user_data['item_id'],
                 'desc'       : user_data['desc'],
@@ -112,8 +110,8 @@ class handler:
                 'size'       : user_data['size'],
                 'base_price' : user_data['base_price'],
             })
-            if (r2 is None) or r2['code']!=0:
-                return render.info('出错了，请稍后再试！(%s %s)'%((r2['code'], r2['msg']) if r2 else ('', '')))
+            if err:
+                return render.info(err)
 
             # 处理图片
             old_image_list = r1['data']['item']['image']
@@ -131,25 +129,24 @@ class handler:
             img_data = base64.b64encode(img_data).decode('utf-8')
 
             # 上传照片
-            r1 = fork_api('/ipfs/upload/image', {
+            r1, err = fork_api('/ipfs/upload/image', {
                 'caller_addr': helper.get_session_addr(),
                 'item_id'    : user_data['item_id'],
                 'image'      : img_data,
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             print("hash", r1['data']['hash'])
 
-        # 除图片
+        # 删除图片
         for im in rm_image_list:
-            r1 = fork_api('/ipfs/remove/image', {
+            r1, err = fork_api('/ipfs/remove/image', {
                 'caller_addr': helper.get_session_addr(),
                 'item_id'    : user_data['item_id'],
                 'hash'       : im,
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请联系管理员！(%s %s)'%\
-                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
         return render.info('成功保存！','/item/list')

@@ -24,12 +24,12 @@ class handler:
                 return render.info('page参数错误！')  
 
             # 链上用户列表
-            r1 = fork_api('/query/user/list', {
+            r1, err = fork_api('/query/user/list', {
                 'page'  : int(user_data['page']),
                 'limit' : setting.PAGE_SIZE,
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             users=[]
             for u in r1['data']['user_list']:

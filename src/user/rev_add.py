@@ -23,12 +23,11 @@ class handler:
             return render.info('错误的参数！')  
 
         # 获取用户信息
-        r1 = fork_api('/query/item/info', {
+        r1, err = fork_api('/query/item/info', {
             'id' : user_data.item_id,
         })
-        if (r1 is None) or r1['code']!=0:
-            return render.info('出错了，请联系管理员！(%s %s)'%\
-                ((r1['code'], r1['msg']) if r1 else ('', '')))
+        if err:
+            return render.info(err)
 
         return render.rev_new(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(), 
             r1['data']['item'])
@@ -46,13 +45,13 @@ class handler:
 
 
         # 链上新建用户
-        r1 = fork_api('/biz/review/new', {
+        r1, err = fork_api('/biz/review/new', {
             'caller_addr'   : helper.get_session_addr(),
             'reviewer_addr' : helper.get_session_addr(),
             'item_id'       : user_data['item_id'],
             'detail'        : user_data['detail'],
         })
-        if (r1 is None) or r1['code']!=0:
-            return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+        if err:
+            return render.info(err)
 
         return render.info('提交成功！','/item/info?item_id=%s'%user_data['item_id'])

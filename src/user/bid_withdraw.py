@@ -23,13 +23,13 @@ class handler:
             return render.info('错误的参数！')  
 
         # 链上新建用户
-        r1 = fork_api('/biz/auction/bid/withdraw', {
+        r1, err = fork_api('/biz/auction/bid/withdraw', {
             'caller_addr' : helper.get_session_addr(),
             'auction_id'  : user_data['auc_id'],
             'id'          : user_data['bid_id'],
         })
-        if (r1 is None) or r1['code']!=0:
-            return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+        if err:
+            return render.info(err)
 
         return render.info('出价已撤销！','/auc/info?auc_id=%s'%user_data['auc_id'])
 

@@ -17,7 +17,7 @@ from helper import get_privilege_name
 from helper import logged
 from helper import create_render
 
-from chain_api import fork_api
+from chain_api import fork_api, fork_api0
 
 app = web.application(urls, globals())
 application = app.wsgifunc()
@@ -72,12 +72,11 @@ class Login:
 
             if session.uid!=setting.SYS_ADMIN: # 管理员
                 # 获取用户信息
-                r1 = fork_api('/query/user/info', {
+                r1, err = fork_api('/query/user/info', {
                     'chain_addr' : session.uid,
                 })
-                if (r1 is None) or r1['code']!=0:
-                    return render.info('出错了，请联系管理员！(%s %s)'%\
-                        ((r1['code'], r1['msg']) if r1 else ('', '')))
+                if err:
+                    return render.info(err)
 
                 if r1['data']['user']['status']!='ACTIVE':
                     news.append('您的账户状态未激活，目前状态为 %s, 请联系管理员审核。'%r1['data']['user']['status'])
@@ -117,7 +116,7 @@ class Login:
             return render.login_error('验证码错误，请重新登录！')
 
         # 链上验证用户
-        r1 = fork_api('/query/user/verify', {
+        r1 = fork_api0('/query/user/verify', {
             'chain_addr' : chainaddr,
             'mystery'    : passwd,
         })
@@ -135,12 +134,11 @@ class Login:
             status = 'ACTIVE'
         else:
             # 获取用户信息
-            r1 = fork_api('/query/user/info', {
+            r1, err = fork_api('/query/user/info', {
                 'chain_addr' : chainaddr,
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.login_error('出错了，请联系管理员！(%s %s)'%\
-                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.login_error(err)
 
             name = r1['data']['user']['login_name']
 

@@ -24,12 +24,11 @@ class handler:
                 return render.info('错误的参数！')  
 
             # 获取用户信息
-            r1 = fork_api('/query/user/info', {
+            r1, err = fork_api('/query/user/info', {
                 'chain_addr' : user_data.uid,
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请联系管理员！(%s %s)'%\
-                    ((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             status_list = [
                 ('WAIT', '待审核'),
@@ -53,7 +52,7 @@ class handler:
                 return render.info('参数错误！')  
 
             # 链上修改用户信息
-            r1 = fork_api('/biz/user/modify', {
+            r1, err = fork_api('/biz/user/modify', {
                 'caller_addr'   : helper.get_session_addr(),
                 'chain_addr'    : user_data['chain_addr'],
                 'bank_acc_name' : user_data['bank_acc_name'],
@@ -63,17 +62,17 @@ class handler:
                 'phone'         : user_data['phone'],
                 'email'         : user_data['email'],
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             # 链上修改用户信息
-            r1 = fork_api('/biz/audit/user', {
+            r1, err = fork_api('/biz/audit/user', {
                 'caller_addr': helper.get_session_addr(),
                 'chain_addr' : user_data['chain_addr'],
                 'status'     : user_data['status'],
             })
-            if (r1 is None) or r1['code']!=0:
-                return render.info('出错了，请稍后再试！(%s %s)'%((r1['code'], r1['msg']) if r1 else ('', '')))
+            if err:
+                return render.info(err)
 
             return render.info('成功保存！','/admin/user')
         else:

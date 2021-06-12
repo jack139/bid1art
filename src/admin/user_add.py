@@ -7,7 +7,7 @@ import helper
 from helper import logged
 from helper import create_render
 
-from chain_api import fork_api
+from chain_api import fork_api0
 
 # 用户管理
 
@@ -44,7 +44,7 @@ class handler:
                 return render.info('用户类型错误！')
 
             # 链上新建用户
-            r1 = fork_api('/biz/user/register', {
+            r1 = fork_api0('/biz/user/register', {
                 'caller_addr'   : helper.get_session_addr(),
                 'login_name'    : user_data['login_name'],
                 'user_type'     : user_type,
