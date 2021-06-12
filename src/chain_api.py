@@ -66,7 +66,8 @@ def fork_api(api_uri, data_para={}):
 
     # 返回 （结果， 出错信息）
     if (result is None) or result['code']!=0:
-        return None, '出错了，请联系管理员！(%s %s)'% \
-            ((result['code'], result['msg']) if result else ('', ''))
+        err_msg = '出错了，请联系管理员！(%s %s)'% ((result['code'], result['msg']) if result else ('', ''))
+        print('ERROR: ', api_uri, data_para, err_msg)
+        return None, err_msg
     else:
         return result, None
