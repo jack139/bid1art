@@ -37,5 +37,18 @@ class handler:
             return render.info('出错了，请联系管理员！(%s %s)'%\
                 ((r2['code'], r2['msg']) if r2 else ('', '')))
 
+        # 获取出价清单
+        r3 = fork_api('/query/bid/list', {
+            'auction_id' : user_data.auc_id,
+            'status'     : 'ACTIVE|WITHDRAW',
+            'page'       : 1,
+            'limit'      : 2000, # TODO: 如果超过2000个出价，会有显示问题
+        })
+        if (r3 is None) or r3['code']!=0:
+            return render.info('出错了，请联系管理员！(%s %s)'%\
+                ((r3['code'], r3['msg']) if r3 else ('', '')))
+
+        r3['data']['bid_list'] = sorted(r3['data']['bid_list'], key=lambda x: x['bid_time'], reverse=True)
+
         return render.auc_info(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            r1['data']['auction'], r2['data']['item'])
+            r1['data']['auction'], r2['data']['item'], r3['data']['bid_list'])

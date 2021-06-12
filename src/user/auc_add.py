@@ -58,7 +58,7 @@ class handler:
         user_data=web.input(auc_house_id='', reserved_price='', item_id='')
 
         if '' in [user_data.auc_house_id, user_data.reserved_price, user_data.item_id]:
-            return render.info('所有者链地址、拍卖行id、底价均不能为空！')  
+            return render.info('拍卖行id、底价均不能为空！')  
 
         # 获取用户信息
         r1 = fork_api('/query/item/info', {

@@ -1,4 +1,4 @@
-$def with (name, str1, addr, auc, item)
+$def with (name, str1, addr, auc, item, bids)
 
 $var title: 拍卖信息
 $var css:
@@ -32,6 +32,13 @@ $var addr: $addr
 </tbody>
 </table>
 
+<div class="article_box">
+    <div>出价历史：</div>
+    <textarea rows="8" cols="100" id="bid_history">
+    $for h in bids:
+        $h['bid_time']，用户：$h['buyer_addr'][-8:]，出价：$h['bid_price']，状态：$h['status']；
+    </textarea>
+</div>
 
 <div class="article_box">
 $if addr==auc['seller_addr'] and auc['status']=='WAIT':
@@ -42,9 +49,9 @@ $if addr!=auc['seller_addr'] and auc['status']=='OPEN':
 </div>
 
 <div class="article_box">
-  <div>修改历史：</div>
-  <textarea rows="8" cols="100" id="history">
-  $for h in auc['last_date']:
-      $h['date']，用户：$h['caller']，操作：$h['act']；
-  </textarea>
+    <div>修改历史：</div>
+    <textarea rows="8" cols="100" id="history">
+    $for h in auc['last_date']:
+        $h['date']，用户：$h['caller']，操作：$h['act']；
+    </textarea>
 </div>
