@@ -29,8 +29,13 @@ class handler:
         if err:
             return render.info(err)
 
-        web.header('Content-Type', 'application/octet-stream')
-
         img_data = base64.b64decode(r1['data']['data'])
+
+        if img_data[:2] == b'\xFF\xD8':
+            web.header('Content-type', 'image/jpeg')
+        elif img_data[:4] == b'\x89\x50\x4E\x47':
+            web.header('Content-type', 'image/png')
+        else:
+            web.header('Content-type', 'application/octet-stream')
 
         return img_data
