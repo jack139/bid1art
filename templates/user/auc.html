@@ -40,5 +40,10 @@ $for u in aucs:
         &nbsp;&nbsp;- $page -&nbsp;&nbsp;
         $if has_next:
             <a href="/auc/list?page=$(page+1)">后一页</a>
-
+    $else:
+        $if page > 1:
+            <a href="/auc/list?page=$(page-1)&seller=&addr">前一页</a>&nbsp;&nbsp;
+        &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+        $if has_next:
+            <a href="/auc/list?page=$(page+1)&seller=&addr">后一页</a>    
 </div>
