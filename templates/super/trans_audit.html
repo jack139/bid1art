@@ -13,7 +13,7 @@ $var addr: $addr
 <table class="props_tb">
 <thead>
         <tr class="even">
-            <th>交易id</th>
+            <th>艺术品</th>
             <th>成交时间</th>
             <th>卖家</th>
             <th>买家</th>
@@ -24,10 +24,10 @@ $var addr: $addr
 
 $for u in trans:
     <tr>
-    <td><a href="/plat/trans_audit_edit?trans_id=$u['id']">$u['id']</a></td>
-    <td>$u['trans_date']</td>
-    <td>$u['seller_addr']</td>
-    <td>$u['buyer_addr']</td>
+    <td><img height="100" src="/plat/get_image_by_item?item_id=$u['item_id']"/></td>
+    <td><a href="/plat/trans_audit_edit?trans_id=$u['id']">$u['trans_date']</a></td>
+    <td>$u['seller_addr'][-8:]</td>
+    <td>$u['buyer_addr'][-8:]</td>
     <td>$u['status']</td>
     </tr>
 

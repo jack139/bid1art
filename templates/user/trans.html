@@ -14,7 +14,7 @@ $var addr: $addr
 <thead>
         <tr class="even">
             <th>交易时间</th>
-            <th>艺术品id</th>
+            <th>艺术品</th>
             <th>成交价</th>
             <th>卖家</th>
             <th>买家</th>
@@ -26,7 +26,7 @@ $var addr: $addr
 $for u in trans:
     <tr>
     <td><a href="/trans/info?trans_id=$u['id']">$u['trans_date']</a></td>
-    <td>$u['item_id']</td>
+    <td><img height="100" src="/plat/get_image_by_item?item_id=$u['item_id']"/></td>
     <td>$u['hammer_price']</td>
     <td>$u['seller_addr'][-8:]</td>
     <td>$u['buyer_addr'][-8:]</td>

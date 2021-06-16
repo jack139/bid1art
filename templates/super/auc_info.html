@@ -1,0 +1,83 @@
+$def with (name, str1, addr, auc, item, bids)
+
+$var title: 拍卖信息
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu:
+$var addr: $addr
+
+<div class="caption"><h2>拍卖信息</h2></div>
+
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>物品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']">$item['desc']</a></td></tr>
+<tr><td>拍卖行</td><td class="t_l">$auc['auction_house_id'][-8:]</td></tr>
+<tr><td>卖家</td><td class="t_l">$auc['seller_addr'][-8:]</td></tr>
+<tr><td>底价</td><td class="t_l">$auc['reserved_price']</td></tr>
+<tr><td>发起日期</td><td class="t_l">$auc['req_date']</td></tr>
+<tr><td>开拍日期</td><td class="t_l">$auc['open_date']</td></tr>
+<tr><td>结束日期</td><td class="t_l">$auc['close_date']</td></tr>
+<tr><td>当前状态</td><td class="t_l">$auc['status']</td></tr>
+
+</tbody>
+</table>
+
+<br/>
+
+<div>出价历史：</div>
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th width="20%">出价时间</th>
+        <th>出价人</th>
+        <th>价格</th>
+        <th>状态</th>
+        <th width="20%">操作</th>
+    </tr>
+</thead>
+<tbody>
+<tbody>
+$for u in bids:
+    <tr>
+        <td>$u['bid_time']</td>
+        <td>$u['buyer_addr'][-8:]</td>
+        <td>$u['bid_price']</td>
+        <td>$u['status']</td>
+        <td>
+            $if auc['status']=='OPEN' and u['buyer_addr']==addr and u['status']=='ACTIVE':
+                <a class="abtn"
+                   onclick="alertify.confirm('提醒！','确定要撤销吗？',\
+                   function(){window.location.href='/bid/withdraw?bid_id=$u['id']&auc_id=$auc['id']';},\
+                   function(){}).set('defaultFocus', 'cancel');return false;">撤销</a>
+        </td>
+    </tr>
+</tbody>
+</table>
+
+<br/>
+
+<div class="article_box">
+$if addr==auc['seller_addr'] and auc['status']=='WAIT':
+    <a class="btn" href="/auc/edit?auc_id=$auc['id']">修改拍卖申请</a>
+$if addr!=auc['seller_addr'] and auc['status']=='OPEN':
+    <a class="btn" href="/bid/new?auc_id=$auc['id']">出价</a>
+&nbsp;&nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
+</div>
+
+<div class="article_box">
+    <div>修改历史：</div>
+    <textarea rows="8" cols="100" id="history">
+    $for h in auc['last_date']:
+        $h['date']，用户：$h['caller'][-8:]，操作：$h['act']；
+    </textarea>
+</div>

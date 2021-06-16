@@ -23,9 +23,9 @@ $var addr: $addr
 </thead>
 <tbody>
 
-<tr><td>艺术品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>艺术品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']">$item['desc']</td></tr>
 <tr><td>艺术品状态</td><td class="t_l">$item['status']</td></tr>
-<tr><td>成交时间</td><td class="t_l">$trans['trans_date']</td></tr>
+<tr><td>成交时间</td><td class="t_l"><a href="/auc/info?auc_id=$auc['id']">$trans['trans_date']</a></td></tr>
 <tr><td>卖家</td><td class="t_l">$trans['seller_addr']</td></tr>
 <tr><td>买家</td><td class="t_l">$trans['buyer_addr']</td></tr>
 <tr><td>拍卖行</td><td class="t_l">$auc['auction_house_id']</td></tr>

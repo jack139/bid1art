@@ -13,7 +13,8 @@ url = ('/auc/info')
 class handler:
     def GET(self):
         if not helper.logged(helper.PRIV_TRD|helper.PRIV_DEL|helper.PRIV_ART, 'AUC'):
-            raise web.seeother('/')
+            if not helper.logged(helper.PRIV_AH, 'AUC_OP'):
+                raise web.seeother('/')
 
         render = helper.create_render()
         user_data=web.input(auc_id='')
