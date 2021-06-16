@@ -27,7 +27,7 @@ class handler:
             'page'   : int(user_data['page']),
             'limit'  : setting.PAGE_SIZE,
             'cate'   : 'status',
-            'condition' : 'PAID|CHANGED'
+            'condition' : 'PAID|CHANGED|DELIVERY'
         })
         if err:
             return render.info(err)

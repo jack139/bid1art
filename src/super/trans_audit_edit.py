@@ -47,6 +47,8 @@ class handler:
             ('WAIT', '待审核'),
             ('PAID', '已付款'),
             ('CHANGED', '变更所有权'),
+            ('DELIVERY', '买家已收货'),
+            ('PAYBACK', '向卖家付款'),
             ('ONWAY', '已发货'),
             ('LOCK', '锁定'),
         ]
@@ -65,13 +67,30 @@ class handler:
         if '' in (user_data.trans_id, user_data.status):
             return render.info('参数错误！')  
 
+        # 获取交易信息
+        r3, err = fork_api('/query/trans/info', {
+            'id' : user_data.trans_id,
+        })
+        if err:
+            return render.info(err)
 
-        if user_data.status=='CHANGED':
-            # TODO: 变更所有权
-            pass
+
+        if user_data.status=='CHANGED': 
+            if r3['data']['trans']['status']!='PAID':
+                return render.info('交易状态不是PAID，不能修改所有人！')  
+
+            # 改变物品所有人
+            r2, err = fork_api('/biz/item/change_owner', {
+                'caller_addr': helper.get_session_addr(),
+                'id'         : r3['data']['trans']['item_id'],
+                'owner_addr' : r3['data']['trans']['buyer_addr'],
+            })
+            if err:
+                return render.info(err)
+
 
         # 链上修改拍卖状态
-        r3, err = fork_api('/biz/audit/trans', {
+        r1, err = fork_api('/biz/audit/trans', {
             'caller_addr': helper.get_session_addr(),
             'id'         : user_data['trans_id'],
             'status'     : user_data['status'],

@@ -88,7 +88,6 @@ WAIT        --> INIT              --> OPEN                --> CLOSE
 
 ```
 拍卖成交 --> 买家付款给平台 --> 所有权变更 --> 拍卖行发货 --> 买家确认收货 --> 平台付款给卖家 --> 交易成功
-
 WAIT    --> PAID         --> CHANGED   --> ONWAY    --> DELIVERY   --> PAYBACK      --> SUCCESS
 ```
 
@@ -101,3 +100,6 @@ WAIT    --> PAID         --> CHANGED   --> ONWAY    --> DELIVERY   --> PAYBACK  
 5. 将拍卖行单独管理，一个拍卖行可以有多个管理员
 6. API启动时，从链上下载可显示数据到redis（需解决多节点数据更新时，对redis的刷新，评估必要性）
 7. 所有显示的查询均从redis缓存中查询（评估必要性）
+8. 评论的评价计数的处理
+9. 耗时页面的滚动提示
+10. artchain中信号量机制目前只能单机，集群使用需要用redis之类做统一信号量或队列
