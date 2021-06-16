@@ -38,7 +38,11 @@ $var addr: $addr
 
 <div class="article_box">
 $if addr==trans['buyer_addr'] and trans['status']=='WAIT':
-    <a class="btn" href="/trans/paid?trans_id=$trans['id']">付款</a>
+    <a class="abtn"
+       onclick="alertify.confirm('提醒！','请线下付款给拍卖行。付款完成后，拍卖行将审核并进行艺术品所有权转移。已完成付款了吗？',\
+       function(){window.location.href='/trans/pay?trans_id=$trans['id']';},\
+       function(){}).set('defaultFocus', 'cancel');return false;">付款</a>
+
 &nbsp;&nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
 </div>
 
