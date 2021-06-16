@@ -1,0 +1,62 @@
+$def with (name, str1, addr, trans, auc, item, status_list)
+
+$var title: 审核成交交易
+$var css: 
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #auct2
+$var addr: $addr
+
+
+<div class="caption"><h2>审核成交交易</h2></div>
+
+<form name="settings" method="post" action="/plat/trans_audit_edit">
+<input type="hidden" name="trans_id" value="$trans['id']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>艺术品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>艺术品状态</td><td class="t_l">$item['status']</td></tr>
+<tr><td>成交时间</td><td class="t_l">$trans['trans_date']</td></tr>
+<tr><td>卖家</td><td class="t_l">$trans['seller_addr']</td></tr>
+<tr><td>买家</td><td class="t_l">$trans['buyer_addr']</td></tr>
+<tr><td>拍卖行</td><td class="t_l">$auc['auction_house_id']</td></tr>
+<tr><td>拍卖底价</td><td class="t_l">$auc['reserved_price']</td></tr>
+<tr><td>成交价</td><td class="t_l">$trans['hammer_price']</td></tr>
+<tr><td>状态</td><td class="t_l">
+    <select name="status">
+        $for i in status_list:
+            <option value="$i[0]"
+                $if trans['status']==i[0]:
+                    selected="selected" 
+            >$i[1] ($i[0])</option>
+    </select>
+</td></tr>
+
+</tbody>
+</table>
+
+<p>
+    <input type="submit" name="button" id="button" value="提交" />
+    <input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" />
+</p>
+
+</form>
+
+<br/>
+
+<div class="article_box">
+  <div>修改历史：</div>
+  <textarea rows="8" cols="100" id="history">
+  $for h in trans['last_date']:
+      $h['date']，用户：$h['caller']，操作：$h['act']；
+  </textarea>
+</div>

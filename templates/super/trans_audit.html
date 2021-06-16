@@ -1,0 +1,45 @@
+$def with (name, str1, addr, trans, page, has_next)
+
+$var title: 成交交易审核
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #auct2
+$var addr: $addr
+
+<div class="caption"><h2>成交交易审核</h2></div>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>交易id</th>
+            <th>成交时间</th>
+            <th>卖家</th>
+            <th>买家</th>
+            <th>状态</th>
+        </tr>
+</thead>
+<tbody>
+
+$for u in trans:
+    <tr>
+    <td><a href="/plat/trans_audit_edit?trans_id=$u['id']">$u['id']</a></td>
+    <td>$u['trans_date']</td>
+    <td>$u['seller_addr']</td>
+    <td>$u['buyer_addr']</td>
+    <td>$u['status']</td>
+    </tr>
+
+</tbody>
+</table>
+
+<br/>
+
+<div class="article_box">
+    $if page > 1:
+        <a href="/plat/trans_audit?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+    $if has_next:
+        <a href="/plat/trans_audit?page=$(page+1)">后一页</a>
+</div>
