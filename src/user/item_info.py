@@ -15,10 +15,11 @@ class handler:
         if not helper.logged(helper.PRIV_TRD|helper.PRIV_DEL|helper.PRIV_ART, 'ITEM'):
             if not helper.logged(helper.PRIV_REV, 'REV'): # REV 可以浏览
                 if not helper.logged(helper.PRIV_AH, 'AUC_OP'):
-                    raise web.seeother('/')
+                    if not helper.logged(helper.PRIV_OP, 'ITEM_OP'):
+                        raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input(item_id='')
+        user_data=web.input(item_id='', pos='')
 
         if user_data.item_id=='':
             return render.info('错误的参数！')  
@@ -45,4 +46,4 @@ class handler:
             return render.info(err)
 
         return render.item_info(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            r1['data']['item'], r2['data']['review_list'])
+            r1['data']['item'], r2['data']['review_list'], user_data['pos'])

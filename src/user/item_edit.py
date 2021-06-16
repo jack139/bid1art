@@ -18,7 +18,7 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input(item_id='')
+        user_data=web.input(item_id='', pos='')
 
         item_data = { 'id':'n/a', 'owner_addr':helper.get_session_addr()}
 
@@ -37,7 +37,7 @@ class handler:
             item_data = r1['data']['item']
 
         return render.item_edit(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            item_data)
+            item_data, user_data['pos'])
 
 
     def POST(self):

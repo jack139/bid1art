@@ -1,11 +1,11 @@
-$def with (name, str1, addr, auc, item, bids)
+$def with (name, str1, addr, auc, item, bids, pos='')
 
 $var title: 拍卖信息
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu:
+$var menu: $('#'+pos if len(pos)>0 else "")
 $var addr: $addr
 
 <div class="caption"><h2>拍卖信息</h2></div>
@@ -20,7 +20,7 @@ $var addr: $addr
 </thead>
 <tbody>
 
-<tr><td>物品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']">$item['desc']</a></td></tr>
+<tr><td>物品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']&pos=$self.menu[1:]">$item['desc']</a></td></tr>
 <tr><td>拍卖行</td><td class="t_l">$auc['auction_house_id'][-8:]</td></tr>
 <tr><td>卖家</td><td class="t_l">$auc['seller_addr'][-8:]</td></tr>
 <tr><td>底价</td><td class="t_l">$auc['reserved_price']</td></tr>

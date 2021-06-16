@@ -23,7 +23,7 @@ $var addr: $addr
 </thead>
 <tbody>
 
-<tr><td>艺术品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>艺术品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']&pos=$self.menu[1:]">$item['desc']</a></td></tr>
 <tr><td>评论内容</td><td class="t_l">
   <textarea rows="5" cols="80" id="history" readonly="readonly">$rev['detail']</textarea></td></tr>
 <tr><td>评论时间</td><td class="t_l">$rev['review_date']</td></tr>

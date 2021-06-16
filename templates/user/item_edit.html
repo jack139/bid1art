@@ -1,11 +1,11 @@
-$def with (name, str1, addr, item)
+$def with (name, str1, addr, item, pos='')
 
 $var title: 修改艺术品信息
 $var css:
 $var js: /static/js/resumable.js /static/js/upload_pic.js?v=1.0
 $var name: $'|'.join(str1) $name
 $var load: doFirst_pic();
-$var menu: #trdd2
+$var menu: $('#'+pos if len(pos)>0 else "#trdd2")
 $var addr: $addr
 
 $if item['id']=='n/a':

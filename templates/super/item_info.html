@@ -1,11 +1,11 @@
-$def with (name, str1, addr, item, rev_list)
+$def with (name, str1, addr, item, rev_list, pos='')
 
 $var title: 艺术品信息
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu:
+$var menu: $('#'+pos if len(pos)>0 else "")
 $var addr: $addr
 
 <div class="caption"><h2>艺术品信息</h2></div>

@@ -23,7 +23,7 @@ $var addr: $addr
 
 $for u in aucs:
     <tr>
-    <td><a href="/auc/info?auc_id=$u['id']">$u['req_date']</a></td>
+    <td><a href="/auc/info?auc_id=$u['id']&pos=$self.menu[1:]">$u['req_date']</a></td>
     <td><img height="100" src="/plat/get_image_by_item?item_id=$u['item_id']"/></td>
     <td>$u['seller_addr'][-8:]</td>
     <td>$u['status']</td>

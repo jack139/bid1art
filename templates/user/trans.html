@@ -25,7 +25,7 @@ $var addr: $addr
 
 $for u in trans:
     <tr>
-    <td><a href="/trans/info?trans_id=$u['id']">$u['trans_date']</a></td>
+    <td><a href="/trans/info?trans_id=$u['id']&pos=$self.menu[1:]">$u['trans_date']</a></td>
     <td><img height="100" src="/plat/get_image_by_item?item_id=$u['item_id']"/></td>
     <td>$u['hammer_price']</td>
     <td>$u['seller_addr'][-8:]</td>

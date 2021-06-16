@@ -13,7 +13,7 @@ $var addr: $addr
 <table class="props_tb">
 <thead>
         <tr class="even">
-            <th>艺术品名称</th>
+            <th>艺术品</th>
             <th>评论时间</th>
             <th>评论者链地址</th>
             <th>状态</th>
@@ -23,8 +23,8 @@ $var addr: $addr
 
 $for u in revs:
     <tr>
-    <td><a href="/plat/rev_audit_edit?rev_id=$u['id']&item_id=$u['item_id']">$u['item_id']</a></td>
-    <td>$u['review_date']</td>
+    <td><img height="100" src="/plat/get_image_by_item?item_id=$u['item_id']"/></td>
+    <td><a href="/plat/rev_audit_edit?rev_id=$u['id']&item_id=$u['item_id']">$u['review_date']</a></td>
     <td>$u['reviewer_addr']</td>
     <td>$u['status']</td>
     </tr>

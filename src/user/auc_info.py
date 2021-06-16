@@ -17,7 +17,7 @@ class handler:
                 raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input(auc_id='')
+        user_data=web.input(auc_id='', pos='')
 
         if user_data.auc_id=='':
             return render.info('错误的参数！')  
@@ -49,4 +49,4 @@ class handler:
         r3['data']['bid_list'] = sorted(r3['data']['bid_list'], key=lambda x: x['bid_time'], reverse=True)
 
         return render.auc_info(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            r1['data']['auction'], r2['data']['item'], r3['data']['bid_list'])
+            r1['data']['auction'], r2['data']['item'], r3['data']['bid_list'], user_data['pos'])

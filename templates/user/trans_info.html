@@ -1,11 +1,11 @@
-$def with (name, str1, addr, auc, item, trans)
+$def with (name, str1, addr, auc, item, trans, pos='')
 
 $var title: 成交信息
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu: #tran2
+$var menu: $('#'+pos if len(pos)>0 else "#tran2")
 $var addr: $addr
 
 <div class="caption"><h2>成交信息</h2></div>
@@ -20,8 +20,8 @@ $var addr: $addr
 </thead>
 <tbody>
 
-<tr><td>物品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']">$item['desc']</a></td></tr>
-<tr><td>拍卖行</td><td class="t_l"><a href="/auc/info?auc_id=$auc['id']">$auc['auction_house_id'][-8:]</a></td></tr>
+<tr><td>物品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']&pos=$self.menu[1:]">$item['desc']</a></td></tr>
+<tr><td>拍卖行</td><td class="t_l"><a href="/auc/info?auc_id=$auc['id']&pos=$self.menu[1:]">$auc['auction_house_id'][-8:]</a></td></tr>
 <tr><td>卖家</td><td class="t_l">$trans['seller_addr'][-8:]</td></tr>
 <tr><td>买家</td><td class="t_l">$trans['buyer_addr'][-8:]</td></tr>
 <tr><td>底价</td><td class="t_l">$auc['reserved_price']</td></tr>

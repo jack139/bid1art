@@ -13,6 +13,7 @@ $var addr: $addr
 <table class="props_tb">
 <thead>
         <tr class="even">
+            <th>艺术品</th>
             <th>艺术品名称</th>
             <th>类型</th>
             <th>年代</th>
@@ -23,7 +24,7 @@ $var addr: $addr
 <tbody>
 
 $for u in items:
-    <tr>
+    <td><img height="100" src="/plat/get_image_by_item?item_id=$u['id']"/></td>
     <td><a href="/plat/item_audit_edit?item_id=$u['id']">$u['desc']</a></td>
     <td>$u['type']</td>
     <td>$u['date']</td>

@@ -1,11 +1,11 @@
-$def with (name, str1, addr, auc, item, ah_list)
+$def with (name, str1, addr, auc, item, ah_list, pos='')
 
 $var title: 修改拍卖信息
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu: #auct2
+$var menu: $('#'+pos if len(pos)>0 else "#auct2")
 $var addr: $addr
 
 <div class="caption"><h2>修改拍卖信息</h2></div>

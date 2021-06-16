@@ -11,7 +11,7 @@ $var addr: $addr
 <div class="caption"><h2>所有艺术品</h2></div>
 
 $if u'ITEM' in str1:
-    <p><a class="abtn" href="/item/edit">添加艺术品</a></p>
+    <p><a class="abtn" href="/item/edit?pos=$self.menu">添加艺术品</a></p>
 
 <table class="props_tb">
 <thead>
@@ -27,7 +27,7 @@ $if u'ITEM' in str1:
 <tr>
 $for i,u in enumerate(items):
     <td>
-        <div><a href="/item/info?item_id=$u[0]&is_myitem=$is_myitem">
+        <div><a href="/item/info?item_id=$u[0]&pos=$self.menu[1:]">
             $if len(u[3])>0:
                 <img src="/plat/get_image?hash=$u[3][0]" width="150" />
             $else:
