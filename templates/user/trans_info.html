@@ -43,6 +43,19 @@ $if addr==trans['buyer_addr'] and trans['status']=='WAIT':
        function(){window.location.href='/trans/pay?trans_id=$trans['id']';},\
        function(){}).set('defaultFocus', 'cancel');return false;">付款</a>
 
+$if addr==trans['buyer_addr'] and trans['status']=='ONWAY':
+    <a class="abtn"
+       onclick="alertify.confirm('提醒！','确认收货后，买家将收到货款。确认收到货物了吗？',\
+       function(){window.location.href='/trans/delivery?trans_id=$trans['id']';},\
+       function(){}).set('defaultFocus', 'cancel');return false;">确认收货</a>
+
+$if addr==trans['seller_addr'] and trans['status']=='PAYBACK':
+    <a class="abtn"
+       onclick="alertify.confirm('提醒！','确认收款后，交易将结束。确认收到货款了吗？',\
+       function(){window.location.href='/trans/success?trans_id=$trans['id']';},\
+       function(){}).set('defaultFocus', 'cancel');return false;">确认收款</a>
+
+
 &nbsp;&nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
 </div>
 

@@ -6,9 +6,9 @@ import helper
 
 from chain_api import fork_api
 
-# 买家付款（线下付，这里只改状态）
+# 买家确认收货（线下，这里只改状态）
 
-url = ('/trans/pay')
+url = ('/trans/delivery')
 
 
 class handler:
@@ -37,10 +37,10 @@ class handler:
         r1, err = fork_api('/biz/audit/trans', {
             'caller_addr' : helper.get_session_addr(),
             'id'          : user_data['trans_id'],
-            'status'      : 'PAID',
-            'action'      : 'pay',
+            'status'      : 'DELIVERY',
+            'action'      : 'delivery',
         })
         if err:
             return render.info(err)
 
-        return render.info('买家已付款！','/trans/info?trans_id=%s'%user_data['trans_id'])
+        return render.info('买家已确认收货！','/trans/info?trans_id=%s'%user_data['trans_id'])
