@@ -43,15 +43,15 @@ class handler:
         if err:
             return render.info(err)
 
-        status_list = [
-            ('WAIT', '待审核'),
-            ('PAID', '已付款'),
-            ('CHANGED', '变更所有权'),
-            ('DELIVERY', '买家已收货'),
-            ('PAYBACK', '向卖家付款'),
-            ('ONWAY', '已发货'),
-            ('LOCK', '锁定'),
-        ]
+        status_list = {
+            'WAIT' : '待审核',
+            'PAID' : '买家已付款',
+            'CHANGED' : '已变更所有权',
+            'DELIVERY' : '买家已收货',
+            'PAYBACK' : '向卖家付款',
+            'ONWAY' : '已发货',
+            'LOCK' : '锁定',
+        }
 
         return render.trans_audit_edit(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
             r3['data']['trans'], r1['data']['auction'], r2['data']['item'], status_list)

@@ -87,8 +87,8 @@ WAIT        --> INIT              --> OPEN                --> CLOSE
 #### 交易处理流程
 
 ```
-拍卖成交 --> 买家付款给平台 --> 所有权变更 --> 卖家发货 --> 买家确认收货 --> 平台付款给卖家 --> 交易成功
-WAIT    --> PAID         --> CHANGED --> ONWAY  --> DELIVERY   --> PAYBACK      --> SUCCESS
+拍卖成交 --> 买家付款给平台 --> 拍卖行所有权变更 --> 拍卖行发货 --> 买家确认收货 --> 平台付款给卖家 --> 交易成功
+WAIT    --> PAID         --> CHANGED        --> ONWAY    --> DELIVERY    --> PAYBACK     --> SUCCESS
 ```
 
 

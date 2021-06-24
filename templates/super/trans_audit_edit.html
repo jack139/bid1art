@@ -31,21 +31,22 @@ $var addr: $addr
 <tr><td>拍卖行</td><td class="t_l">$auc['auction_house_id']</td></tr>
 <tr><td>拍卖底价</td><td class="t_l">$auc['reserved_price']</td></tr>
 <tr><td>成交价</td><td class="t_l">$trans['hammer_price']</td></tr>
-<tr><td>状态</td><td class="t_l">
-    <select name="status">
-        $for i in status_list:
-            <option value="$i[0]"
-                $if trans['status']==i[0]:
-                    selected="selected" 
-            >$i[1] ($i[0])</option>
-    </select>
-</td></tr>
+<tr><td>当前状态</td><td class="t_l">$trans['status'] $status_list[trans['status']]</td></tr>
 
 </tbody>
 </table>
 
 <p>
-    <input type="submit" name="button" id="button" value="提交" />
+    $if trans['status']=='PAID':
+        <input type="hidden" name="status" value="CHANGED" />
+        <input type="submit" name="button" id="button" value="变更所有权" />
+    $elif trans['status']=='CHANGED':
+        <input type="hidden" name="status" value="ONWAY" />
+        <input type="submit" name="button" id="button" value="拍卖行发货" />
+    $elif trans['status']=='DELIVERY':
+        <input type="hidden" name="status" value="PAYBACK" />
+        <input type="submit" name="button" id="button" value="向买家付款" />
+
     <input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" />
 </p>
 
@@ -54,9 +55,9 @@ $var addr: $addr
 <br/>
 
 <div class="article_box">
-  <div>修改历史：</div>
-  <textarea rows="8" cols="100" id="history">
-  $for h in trans['last_date']:
-      $h['date']，用户：$h['caller']，操作：$h['act']；
-  </textarea>
+    <div>修改历史：</div>
+    <textarea rows="8" cols="100" id="history">
+    $for h in trans['last_date']:
+        $h['date']，用户：$h['caller']，操作：$h['act']；
+    </textarea>
 </div>
