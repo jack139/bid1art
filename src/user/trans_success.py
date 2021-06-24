@@ -31,7 +31,7 @@ class handler:
 
         # 获取艺术品信息
         r2, err = fork_api('/query/item/info', {
-            'id' : r3['data']['auction']['item_id'],
+            'id' : r3['data']['trans']['item_id'],
         })
         if err:
             return render.info(err)
@@ -54,7 +54,7 @@ class handler:
             # 链上修改艺术品状态信息
             r1, err = fork_api('/biz/audit/item', {
                 'caller_addr': helper.get_session_addr(),
-                'id'         : r3['data']['auction']['item_id'],
+                'id'         : r3['data']['trans']['item_id'],
                 'status'     : 'ACTIVE',
                 'action'     : 'transaction complete',
             })

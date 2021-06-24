@@ -96,24 +96,23 @@ class Login:
 
     def POST(self):
         chainaddr, passwd, rand = web.input().chainaddr, web.input().passwd, web.input().rand
+        render = create_render()
+
+        if session.menu_level>=5:
+            print('-----> 刷验证码！')
+            return render.login_error('验证码已过期，请重新登录！')
+        if session.uid != rand.upper():
+            session.menu_level += 1
+            return render.login_error('验证码错误，请重新登录！')
 
         passwd = ' '.join(passwd.split()) # 去掉回车，只间隔一个空格
         name=''
         menu_level = 60*'-'
         menu_pri = []
 
-        render = create_render()
-
         session.login = 0
         session.privilege = 0
         session.uname=''
-
-        if session.menu_level>=5:
-            print('-----> 刷验证码！')
-            return render.login_error('验证码错误，请重新登录！')
-        if session.uid != rand.upper():
-            session.menu_level += 1
-            return render.login_error('验证码错误，请重新登录！')
 
         # 链上验证用户
         r1 = fork_api0('/query/user/verify', {
