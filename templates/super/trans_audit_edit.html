@@ -11,7 +11,7 @@ $var addr: $addr
 
 <div class="caption"><h2>审核成交交易</h2></div>
 
-<form name="settings" method="post" action="/plat/trans_audit_edit">
+<form name="settings" method="post" action="/plat/trans_audit_edit" id="form">
 <input type="hidden" name="trans_id" value="$trans['id']" />
 
 <table class="props_tb">
@@ -39,13 +39,13 @@ $var addr: $addr
 <p>
     $if trans['status']=='PAID':
         <input type="hidden" name="status" value="CHANGED" />
-        <input type="submit" name="button" id="button" value="变更所有权" />
+        <input type="button" name="button" value="变更所有权" onclick="$$('.floatLayer').show();$$('#form').submit();" />
     $elif trans['status']=='CHANGED':
         <input type="hidden" name="status" value="ONWAY" />
-        <input type="submit" name="button" id="button" value="拍卖行发货" />
+        <input type="button" name="button" value="拍卖行发货" onclick="$$('.floatLayer').show();$$('#form').submit();" />
     $elif trans['status']=='DELIVERY':
         <input type="hidden" name="status" value="PAYBACK" />
-        <input type="submit" name="button" id="button" value="向买家付款" />
+        <input type="button" name="button" value="向买家付款" onclick="$$('.floatLayer').show();$$('#form').submit();" />
 
     <input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" />
 </p>

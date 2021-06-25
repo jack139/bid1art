@@ -10,7 +10,7 @@ $var addr: $addr
 
 <div class="caption"><h2>修改拍卖信息</h2></div>
 
-<form name="settings" method="post" action="/auc/edit">
+<form name="settings" method="post" action="/auc/edit" id="form">
 <input type="hidden" name="auc_id" value="$auc['id']" />
 <input type="hidden" name="seller_addr" value="$auc['seller_addr']" />
 
@@ -39,7 +39,8 @@ $var addr: $addr
 </tbody>
 </table>
 
-<p><input type="submit" name="button" id="button" value="提交" />
+<p>
+<input type="button" name="button" value="提交" onclick="$$('.floatLayer').show();$$('#form').submit();" />
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
 
 </form>

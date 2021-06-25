@@ -10,7 +10,7 @@ $var addr: $addr
 
 <div class="caption"><h2>审核用户状态</h2></div>
 
-<form name="settings" method="post" action="/plat/user_audit_edit">
+<form name="settings" method="post" action="/plat/user_audit_edit" id="form">
 <input type="hidden" name="chain_addr" value="$user['chain_addr']" />
 
 <table class="props_tb">
@@ -45,7 +45,8 @@ $var addr: $addr
 </tbody>
 </table>
 
-<p><input type="submit" name="button" id="button" value="提交" />
+<p>
+<input type="button" name="button" value="保存" onclick="$$('.floatLayer').show();$$('#form').submit();" />
 <input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" /></p>
 
 </form>

@@ -13,7 +13,7 @@ $if item['id']=='n/a':
 $else:
     <div class="caption"><h2>修改艺术品信息</h2></div>
 
-<form name="settings" method="post" action="/item/edit">
+<form name="settings" method="post" action="/item/edit" id="form">
 <input type="hidden" name="item_id" value="$item['id']" />
 <input type="hidden" name="owner_addr" value="$item['owner_addr']" />
 <input type="hidden" name="image" id="form_image" value=""/>
@@ -54,7 +54,8 @@ $else:
 </tbody>
 </table>
 
-<p><input type="submit" name="button" id="button" value="保存" />
+<p>
+<input type="button" name="button" value="保存" onclick="$$('.floatLayer').show();$$('#form').submit();" />
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
 
 </form>

@@ -10,7 +10,7 @@ $var addr: $addr
 
 <div class="caption"><h2>新的出价</h2></div>
 
-<form name="settings" method="post" action="/bid/new">
+<form name="settings" method="post" action="/bid/new" id="form">
 <input type="hidden" name="auc_id" value="$auc['id']" />
 
 <table class="props_tb">
@@ -29,7 +29,8 @@ $var addr: $addr
 </tbody>
 </table>
 
-<p><input type="submit" name="button" id="button" value="提交" />
+<p>
+<input type="button" name="button" value="提交" onclick="$$('.floatLayer').show();$$('#form').submit();" />
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
 
 

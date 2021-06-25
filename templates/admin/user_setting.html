@@ -7,7 +7,7 @@ $var name: $'|'.join(str1) $name
 
 <div class="caption"><h2>用户设置</h2></div>
 
-<form name="settings" method="post" action="/admin/user_setting">
+<form name="settings" method="post" action="/admin/user_setting" id="form">
 <input type="hidden" name="chain_addr" value="$settings['chain_addr']" />
 
 <table class="props_tb">
@@ -41,7 +41,8 @@ $var name: $'|'.join(str1) $name
 </tbody>
 </table>
 
-<p><input type="submit" name="button" id="button" value="保存" />
+<p>
+<input type="button" name="button" value="保存" onclick="$$('.floatLayer').show();$$('#form').submit();" />
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
 
 </form>

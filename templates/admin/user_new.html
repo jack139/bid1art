@@ -7,7 +7,7 @@ $var name: $'|'.join(str1) $name
 
 <div class="caption"><h2>添加用户</h2></div>
 
-<form name="settings" method="post" action="/admin/user_add">
+<form name="settings" method="post" action="/admin/user_add" id="form">
 
 <table class="props_tb">
 <thead>
@@ -39,7 +39,8 @@ $var name: $'|'.join(str1) $name
 </tbody>
 </table>
 
-<p><input type="submit" name="button" id="button" value="提交" />
+<p>
+<input type="button" name="button" value="提交" onclick="$$('.floatLayer').show();$$('#form').submit();" />
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
 
 
