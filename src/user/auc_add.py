@@ -87,4 +87,4 @@ class handler:
         if err:
             return render.info(err)
 
-        return render.info('提交成功！','/auc/list')
+        return render.info('提交成功！','/auc/list?seller=%s'%helper.get_session_addr())

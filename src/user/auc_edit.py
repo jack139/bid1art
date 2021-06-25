@@ -91,4 +91,4 @@ class handler:
         if err:
             return render.info(err)
 
-        return render.info('成功保存！','/auc/list')
+        return render.info('成功保存！','/auc/list?seller=%s'%helper.get_session_addr())

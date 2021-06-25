@@ -103,3 +103,4 @@ WAIT    --> PAID         --> CHANGED        --> ONWAY    --> DELIVERY    --> PAY
 8. 评论的评价计数的处理
 9. 耗时页面的滚动提示
 10. artchain中信号量机制目前只能单机，集群使用需要用redis之类做统一信号量或队列
+11. NFT
