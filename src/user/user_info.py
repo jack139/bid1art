@@ -32,5 +32,12 @@ class handler:
         if err:
             return render.info(err)
 
+        # 获取用户账户
+        r2, err = fork_api('/query/user/credit_balance', {
+            'chain_addr' : user_data.uid,
+        })
+        if err:
+            return render.info(err)
+
         return render.user_info(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
-            r1['data']['user'], helper.user_type)
+            r1['data']['user'], helper.user_type, r2['data']['balance'])

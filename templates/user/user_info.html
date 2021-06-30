@@ -1,4 +1,4 @@
-$def with (name, str1, addr, user, user_type)
+$def with (name, str1, addr, user, user_type, balance)
 
 $var title: 用户信息
 $var css:
@@ -31,6 +31,7 @@ $var addr: $addr
 <tr><td>电子邮件</td><td class="t_l">$user['email']</td></tr>
 <tr><td>推荐人链地址</td><td class="t_l">$user['referrer']</td></tr>
 <tr><td>状态</td><td class="t_l">$user['status']</td></tr>
+<tr><td>通证</td><td class="t_l">$balance['amount'] $balance['denom']</td></tr>
 
 </tbody>
 </table>
