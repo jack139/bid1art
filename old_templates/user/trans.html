@@ -1,0 +1,53 @@
+$def with (name, str1, addr, trans, page, has_next, is_buyer=True)
+
+$var title: 所有成交交易
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: $("#tran1" if is_buyer else "#tran2")
+$var addr: $addr
+
+<div class="caption"><h2>所有成交交易</h2></div>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>交易时间</th>
+            <th>艺术品</th>
+            <th>成交价</th>
+            <th>卖家</th>
+            <th>买家</th>
+            <th>状态</th>
+        </tr>
+</thead>
+<tbody>
+
+$for u in trans:
+    <tr>
+    <td><a href="/trans/info?trans_id=$u['id']&pos=$self.menu[1:]">$u['trans_date']</a></td>
+    <td><img height="100" src="/plat/get_image_by_item?item_id=$u['item_id']"/></td>
+    <td>$u['hammer_price']</td>
+    <td>$u['seller_addr'][-8:]</td>
+    <td>$u['buyer_addr'][-8:]</td>
+    <td>$u['status']</td>
+    </tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    $if is_buyer:
+        $if page > 1:
+            <a href="/trans/list?page=$(page-1)&buyer=1">前一页</a>&nbsp;&nbsp;
+        &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+        $if has_next:
+            <a href="/trans/list?page=$(page+1)&buyer=1">后一页</a>
+    $else:
+        $if page > 1:
+            <a href="/trans/list?page=$(page-1)&seller=1">前一页</a>&nbsp;&nbsp;
+        &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+        $if has_next:
+            <a href="/trans/list?page=$(page+1)&seller=1">后一页</a>
+</div>

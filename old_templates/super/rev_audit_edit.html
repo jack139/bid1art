@@ -1,0 +1,58 @@
+$def with (name, str1, addr, rev, item, status_list)
+
+$var title: 审核评论状态
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #plat3
+$var addr: $addr
+
+<div class="caption"><h2>审核评论状态</h2></div>
+
+<form name="settings" method="post" action="/plat/rev_audit_edit" id="form">
+<input type="hidden" name="rev_id" value="$rev['id']" />
+<input type="hidden" name="item_id" value="$rev['item_id']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>艺术品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']&pos=$self.menu[1:]">$item['desc']</a></td></tr>
+<tr><td>评论内容</td><td class="t_l">
+  <textarea rows="5" cols="80" id="history" readonly="readonly">$rev['detail']</textarea></td></tr>
+<tr><td>评论时间</td><td class="t_l">$rev['review_date']</td></tr>
+<tr><td>评论者链地址</td><td class="t_l">$rev['reviewer_addr']</td></tr>
+<tr><td>状态</td><td class="t_l">
+	<select name="status">
+		$for i in status_list:
+			<option value="$i[0]"
+				$if rev['status']==i[0]:
+					selected="selected" 
+			>$i[1] ($i[0])</option>
+	</select>
+</td></tr>
+
+</tbody>
+</table>
+
+<p>
+<input type="button" name="button" value="保存" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+<input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" /></p>
+
+</form>
+
+<br/>
+
+<div class="article_box">
+  <div>修改历史：</div>
+  <textarea rows="8" cols="100" id="history">
+  $for h in rev['last_date']:
+      $h['date']，用户：$h['caller']，操作：$h['act']；
+  </textarea>
+</div>

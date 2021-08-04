@@ -1,0 +1,59 @@
+$def with (name, str1, addr, items, page, has_next, is_myitem, cols=4)
+
+$var title: 所有艺术品
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: $("#trdd1" if is_myitem>0 else "#trdd2")
+$var addr: $addr
+
+<div class="caption"><h2>所有艺术品</h2></div>
+
+$if u'ITEM' in str1:
+    <p><a class="abtn" href="/item/edit?pos=$self.menu">添加艺术品</a></p>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+</thead>
+<tbody>
+
+<tr>
+$for i,u in enumerate(items):
+    <td>
+        <div><a href="/item/info?item_id=$u[0]&pos=$self.menu[1:]">
+            $if len(u[3])>0:
+                <img src="/plat/get_image?hash=$u[3][0]" width="150" />
+            $else:
+                <img src="/static/image/wood-box.png" width="150" />
+        </a></div>
+        <div>$u[1]</div>
+        <div>$u[2]</div>
+    </td>
+    $if (i+1)%cols==0:
+        </tr><tr>
+</tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    $if page > 1:
+        $if is_myitem>0:
+            <a href="/item/list?page=$(page-1)&owner=$addr">前一页</a>&nbsp;&nbsp;
+        $else:
+            <a href="/item/list?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+    $if has_next:
+        $if is_myitem>0:
+            <a href="/item/list?page=$(page+1)&owner=$addr">后一页</a>
+        $else:
+            <a href="/item/list?page=$(page+1)">后一页</a>
+</div>

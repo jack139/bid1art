@@ -1,0 +1,43 @@
+$def with (name, str1, addr, aucs, page, has_next)
+
+$var title: 拍卖申请审核
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #auct1
+$var addr: $addr
+
+<div class="caption"><h2>拍卖申请审核</h2></div>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>艺术品</th>
+            <th>申请时间</th>
+            <th>申请者链地址</th>
+            <th>状态</th>
+        </tr>
+</thead>
+<tbody>
+
+$for u in aucs:
+    <tr>
+    <td><img height="100" src="/plat/get_image_by_item?item_id=$u['item_id']"/></td>
+    <td><a href="/plat/auc_audit_edit?auc_id=$u['id']">$u['req_date']</a></td>
+    <td>$u['seller_addr'][-8:]</td>
+    <td>$u['status']</td>
+    </tr>
+
+</tbody>
+</table>
+
+<br/>
+
+<div class="article_box">
+    $if page > 1:
+        <a href="/plat/auc_audit?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+    $if has_next:
+        <a href="/plat/auc_audit?page=$(page+1)">后一页</a>
+</div>

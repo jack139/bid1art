@@ -1,0 +1,47 @@
+$def with (name, str1)
+
+$var title: 添加用户
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+
+<div class="caption"><h2>添加用户</h2></div>
+
+<form name="settings" method="post" action="/admin/user_add" id="form">
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+        	<th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+<tr><td>用户名</td><td class="t_l"><input type="text" name="login_name" value=""/>*</td></tr>
+<tr><td>用户类型</td><td class="t_l">
+	<select name="user_type">
+		<option value="TRD" selected="selected">交易者 (TRD)</option>
+		<option value="AH">拍卖行 (AH)</option>
+		<option value="DEL">经销商 (DEL)</option>
+		<option value="ART">艺术家 (ART)</option>
+		<option value="REV">评论家 (REV)</option>
+		<option value="OP">平台管理员 (OP)</option>
+	</select>
+</td></tr>
+<tr><td>银行开户姓名</td><td class="t_l"><input type="text" name="bank_acc_name" value=""/></td></tr>
+<tr><td>银行名称</td><td class="t_l"><input type="text" name="bank_name" value=""/></td></tr>
+<tr><td>银行账号</td><td class="t_l"><input type="text" name="bank_acc_no" value="" size="50"/></td></tr>
+<tr><td>联系地址</td><td class="t_l"><input type="text" name="address" value="" size="50" /></td></tr>
+<tr><td>联系电话</td><td class="t_l"><input type="text" name="phone" value=""/></td></tr>
+<tr><td>电子邮件</td><td class="t_l"><input type="text" name="email" value=""/></td></tr>
+<tr><td>推荐人链地址</td><td class="t_l"><input type="text" name="referrer" value="" size="50"/></td></tr>
+
+</tbody>
+</table>
+
+<p>
+<input type="button" name="button" value="提交" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
+
+
+</form>

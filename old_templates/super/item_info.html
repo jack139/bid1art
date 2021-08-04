@@ -1,0 +1,81 @@
+$def with (name, str1, addr, item, rev_list, pos='')
+
+$var title: 艺术品信息
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: $('#'+pos if len(pos)>0 else "")
+$var addr: $addr
+
+<div class="caption"><h2>艺术品信息</h2></div>
+
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th>内容</th>
+    </tr>
+</thead>
+<tbody>
+
+<tr><td>名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>所有者</td><td class="t_l">$item['owner_addr'][-8:]</td></tr>
+<tr><td>描述</td><td class="t_l">$item['detail']</td></tr>
+<tr><td>年代</td><td class="t_l">$item['date']</td></tr>
+<tr><td>类型</td><td class="t_l">$item['type']</td></tr>
+<tr><td>主题</td><td class="t_l">$item['subject']</td></tr>
+<tr><td>材质</td><td class="t_l">$item['media']</td></tr>
+<tr><td>尺寸</td><td class="t_l">$item['size']</td></tr>
+<tr><td>最近交易价格</td><td class="t_l">$item['base_price']</td></tr>
+
+<tr><td>图片</td><td class="t_l">
+    <ul id="image-list">
+        $for im in item['image']:
+            $if len(im)>0:
+              <li style="width: 450px;">
+                <img src="/plat/get_image?hash=$im"/>
+              </li>
+    </ul>
+</td></tr>
+</tbody>
+</table>
+
+<div class="article_box">
+    <p>评论：
+    $if u'REV' in str1:
+        <a class="btn" href="/rev/add?item_id=$item['id']">添加评论</a>
+    </p>
+
+    $for r in rev_list:
+        <div>评论人：$r['reviewer_addr'][-8:] 
+            $if u'REV' in str1:
+                <a class="btn" href="/rev/edit?rev_id=$r['id']&item_id=$r['item_id']">修改评论</a>
+        </div>
+        <div>评论时间：$r['review_date']</div>
+        $if u'REV' in str1:
+            <div>审核状态：$r['status']</div>
+        <textarea rows="5" cols="100" id="history" readonly="readonly">$r['detail']</textarea>
+        <div>&nbsp;&nbsp;</div>
+</div>
+
+
+<div class="article_box">
+$if addr==item['owner_addr']:
+    <a class="btn" href="/item/edit?item_id=$item['id']">修改艺术品信息</a>
+    $if item['status']=='ACTIVE':
+        <a class="btn" href="/auc/add?item_id=$item['id']">申请拍卖</a>
+
+&nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
+</div>
+
+<br>
+
+<div class="article_box">
+    <div>修改历史：</div>
+    <textarea rows="8" cols="100" id="history">
+    $for h in item['last_date']:
+        $h['date']，用户：$h['caller'][-8:]，操作：$h['act']；
+    </textarea>
+</div>

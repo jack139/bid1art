@@ -1,0 +1,62 @@
+$def with (name, str1, addr, user, status_list)
+
+$var title: 审核用户状态
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #plat1
+$var addr: $addr
+
+<div class="caption"><h2>审核用户状态</h2></div>
+
+<form name="settings" method="post" action="/plat/user_audit_edit" id="form">
+<input type="hidden" name="chain_addr" value="$user['chain_addr']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>用户链地址</td><td class="t_l">$user['chain_addr']</td></tr>
+<tr><td>用户名称</td><td class="t_l">$user['login_name']</td></tr>
+<tr><td>用户类型</td><td class="t_l">$user['user_type']</td></tr>
+<tr><td>银行账户名称</td><td class="t_l">$user['bank_acc_name']</td></tr>
+<tr><td>银行账号</td><td class="t_l">$user['bank_acc_no']</td></tr>
+<tr><td>开户银行</td><td class="t_l">$user['bank_name']</td></tr>
+<tr><td>联系地址</td><td class="t_l">$user['address']</td></tr>
+<tr><td>联系电话</td><td class="t_l">$user['phone']</td></tr>
+<tr><td>电子邮件</td><td class="t_l">$user['email']</td></tr>
+<tr><td>注册日期</td><td class="t_l">$user['reg_date']</td></tr>
+<tr><td>状态</td><td class="t_l">
+	<select name="status">
+		$for i in status_list:
+			<option value="$i[0]"
+				$if user['status']==i[0]:
+					selected="selected" 
+			>$i[1] ($i[0])</option>
+	</select>
+</td></tr>
+
+</tbody>
+</table>
+
+<p>
+<input type="button" name="button" value="保存" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+<input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" /></p>
+
+</form>
+
+<br/>
+
+<div class="article_box">
+  <div>修改历史：</div>
+  <textarea rows="8" cols="100" id="history">
+  $for h in user['last_date']:
+      $h['date']，用户：$h['caller']，操作：$h['act']；
+  </textarea>
+</div>

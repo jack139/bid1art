@@ -1,0 +1,63 @@
+$def with (name, str1, addr, trans, auc, item, status_list)
+
+$var title: 审核成交交易
+$var css: 
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #auct2
+$var addr: $addr
+
+
+<div class="caption"><h2>审核成交交易</h2></div>
+
+<form name="settings" method="post" action="/plat/trans_audit_edit" id="form">
+<input type="hidden" name="trans_id" value="$trans['id']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>艺术品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']&pos=$self.menu[1:]">$item['desc']</td></tr>
+<tr><td>艺术品状态</td><td class="t_l">$item['status']</td></tr>
+<tr><td>成交时间</td><td class="t_l"><a href="/auc/info?auc_id=$auc['id']&pos=$self.menu[1:]">$trans['trans_date']</a></td></tr>
+<tr><td>卖家</td><td class="t_l">$trans['seller_addr']</td></tr>
+<tr><td>买家</td><td class="t_l">$trans['buyer_addr']</td></tr>
+<tr><td>拍卖行</td><td class="t_l">$auc['auction_house_id']</td></tr>
+<tr><td>拍卖底价</td><td class="t_l">$auc['reserved_price']</td></tr>
+<tr><td>成交价</td><td class="t_l">$trans['hammer_price']</td></tr>
+<tr><td>当前状态</td><td class="t_l">$trans['status'] $status_list[trans['status']]</td></tr>
+
+</tbody>
+</table>
+
+<p>
+    $if trans['status']=='PAID':
+        <input type="hidden" name="status" value="CHANGED" />
+        <input type="button" name="button" value="变更所有权" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+    $elif trans['status']=='CHANGED':
+        <input type="hidden" name="status" value="ONWAY" />
+        <input type="button" name="button" value="拍卖行发货" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+    $elif trans['status']=='DELIVERY':
+        <input type="hidden" name="status" value="PAYBACK" />
+        <input type="button" name="button" value="向买家付款" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+
+    <input type="button" name="cancel" value="返回" onclick="window.history.go(-1);" />
+</p>
+
+</form>
+
+<br/>
+
+<div class="article_box">
+    <div>修改历史：</div>
+    <textarea rows="8" cols="100" id="history">
+    $for h in trans['last_date']:
+        $h['date']，用户：$h['caller']，操作：$h['act']；
+    </textarea>
+</div>

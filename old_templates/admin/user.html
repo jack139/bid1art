@@ -1,0 +1,43 @@
+$def with (name, str1, users, page, has_next)
+
+$var title: 用户管理
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+
+<div class="caption"><h2>用户管理</h2></div>
+
+<p><a class="abtn" href="/admin/user_add">添加新用户</a></p>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>链地址</th>
+            <th>用户名</th>
+            <th>用户类型</th>
+            <th>注册日期</th>
+            <th>状态</th>
+        </tr>
+</thead>
+<tbody>
+
+$for u in users:
+    <tr>
+    <td><a href="/admin/user_setting?uid=$u[1]">$u[1]</a></td>
+    <td>$u[0]</td>
+    <td>$u[2]</td>
+    <td>$u[3]</td>
+    <td>$u[4]</td>
+    </tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    $if page > 1:
+        <a href="/admin/user?page=$(page-1)">前一页</a>&nbsp;&nbsp;
+    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
+    $if has_next:
+        <a href="/admin/user?page=$(page+1)">后一页</a>
+</div>

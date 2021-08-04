@@ -1,0 +1,61 @@
+$def with (name, str1, addr, item, pos='')
+
+$var title: 修改艺术品信息
+$var css:
+$var js: /static/js/resumable.js /static/js/upload_pic.js?v=1.0
+$var name: $'|'.join(str1) $name
+$var load: doFirst_pic();
+$var menu: $('#'+pos if len(pos)>0 else "#trdd2")
+$var addr: $addr
+
+$if item['id']=='n/a':
+    <div class="caption"><h2>新增艺术品信息</h2></div>
+$else:
+    <div class="caption"><h2>修改艺术品信息</h2></div>
+
+<form name="settings" method="post" action="/item/edit" id="form">
+<input type="hidden" name="item_id" value="$item['id']" />
+<input type="hidden" name="owner_addr" value="$item['owner_addr']" />
+<input type="hidden" name="image" id="form_image" value=""/>
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>名称</td><td class="t_l"><input type="text" name="desc" value="$item.get('desc')" size="80"/>*</td></tr>
+<tr><td>所有者</td><td class="t_l">$item['owner_addr'][-8:]</td></tr>
+<tr><td>描述</td><td class="t_l"><textarea rows="3" cols="80" name="detail">$item.get('detail')</textarea></td></tr>
+<tr><td>年代</td><td class="t_l"><input type="text" name="date" value="$item.get('date')" size="80"/></td></tr>
+<tr><td>类型</td><td class="t_l"><input type="text" name="type" value="$item.get('type')" size="80" placeholder="原作、复制品"/></td></tr>
+<tr><td>主题</td><td class="t_l"><input type="text" name="subject" value="$item.get('subject')" size="80" placeholder="古代、现代、风景、雕塑、人像，等"/></td></tr>
+<tr><td>材质</td><td class="t_l"><input type="text" name="media" value="$item.get('media')" size="80" placeholder="石头、金属、瓷器、油画、素描、电子艺术品，等"/></td></tr>
+<tr><td>尺寸</td><td class="t_l"><input type="text" name="size" value="$item.get('size')" size="80"/></td></tr>
+<tr><td>最近交易价格</td><td class="t_l"><input type="text" name="base_price" value="$item.get('base_price')"/>*</td></tr>
+
+<tr><td>上传图片</td><td>
+    <a class="abtn" href="javascript:void(0);" id="picBrowseButton">上传图片</a>
+    <ul id="image-list">
+        $if ('image' in item.keys()) and (len(item['image'])>0):
+            $for i in item['image']:
+                $if len(i)>0:
+                  <li id="$(i.replace('.','_'))" style="width: 450px;">
+                    <img src="/plat/get_image?hash=$i"/>
+                    <button onclick="remove_image('$(i.replace('.','_'))');return false;">删除</button>
+                  </li>
+    </ul>
+    </td>
+</tr>
+
+</tbody>
+</table>
+
+<p>
+<input type="button" name="button" value="保存" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
+
+</form>

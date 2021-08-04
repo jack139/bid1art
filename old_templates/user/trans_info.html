@@ -1,0 +1,68 @@
+$def with (name, str1, addr, auc, item, trans, pos='')
+
+$var title: 成交信息
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: $('#'+pos if len(pos)>0 else "#tran2")
+$var addr: $addr
+
+<div class="caption"><h2>成交信息</h2></div>
+
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>物品名称</td><td class="t_l"><a href="/item/info?item_id=$item['id']&pos=$self.menu[1:]">$item['desc']</a></td></tr>
+<tr><td>拍卖行</td><td class="t_l"><a href="/auc/info?auc_id=$auc['id']&pos=$self.menu[1:]">$auc['auction_house_id'][-8:]</a></td></tr>
+<tr><td>卖家</td><td class="t_l">$trans['seller_addr'][-8:]</td></tr>
+<tr><td>买家</td><td class="t_l">$trans['buyer_addr'][-8:]</td></tr>
+<tr><td>底价</td><td class="t_l">$auc['reserved_price']</td></tr>
+<tr><td>成交价</td><td class="t_l">$trans['hammer_price']</td></tr>
+<tr><td>成交出价日期</td><td class="t_l">$trans['hammer_time']</td></tr>
+<tr><td>成交日期</td><td class="t_l">$trans['trans_date']</td></tr>
+<tr><td>当前状态</td><td class="t_l">$trans['status']</td></tr>
+
+</tbody>
+</table>
+
+<br/>
+
+
+<div class="article_box">
+$if addr==trans['buyer_addr'] and trans['status']=='WAIT':
+    <a class="abtn"
+       onclick="alertify.confirm('提醒！','请线下付款给拍卖行。付款完成后，拍卖行将审核并进行艺术品所有权转移。已完成付款了吗？',\
+       function(){window.location.href='/trans/pay?trans_id=$trans['id']';},\
+       function(){}).set('defaultFocus', 'cancel');return false;">付款</a>
+
+$if addr==trans['buyer_addr'] and trans['status']=='ONWAY':
+    <a class="abtn"
+       onclick="alertify.confirm('提醒！','确认收货后，买家将收到货款。确认收到货物了吗？',\
+       function(){window.location.href='/trans/delivery?trans_id=$trans['id']';},\
+       function(){}).set('defaultFocus', 'cancel');return false;">确认收货</a>
+
+$if addr==trans['seller_addr'] and trans['status']=='PAYBACK':
+    <a class="abtn"
+       onclick="alertify.confirm('提醒！','确认收款后，交易将结束。确认收到货款了吗？',\
+       function(){window.location.href='/trans/success?trans_id=$trans['id']';},\
+       function(){}).set('defaultFocus', 'cancel');return false;">确认收款</a>
+
+
+&nbsp;&nbsp;<a class="btn" href="javascript:history.go(-1);">返回</a>
+</div>
+
+<div class="article_box">
+    <div>修改历史：</div>
+    <textarea rows="8" cols="100" id="history">
+    $for h in trans['last_date']:
+        $h['date']，用户：$h['caller'][-8:]，操作：$h['act']；
+    </textarea>
+</div>

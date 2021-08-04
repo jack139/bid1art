@@ -1,0 +1,42 @@
+$def with (name, str1, addr, item, ah_list)
+
+$var title: 新增拍卖
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #auct2
+$var addr: $addr
+
+<div class="caption"><h2>新增拍卖申请</h2></div>
+
+<form name="settings" method="post" action="/auc/add" id="form">
+<input type="hidden" name="item_id" value="$item['id']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+        	<th>项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+<tr><td>物品名称</td><td class="t_l">$item['desc']</td></tr>
+<tr><td>卖家</td><td class="t_l">$addr[-8:]</td></tr>
+<tr><td>拍卖行</td><td class="t_l">
+	<select name="auc_house_id">
+		$for i in ah_list:
+			<option value="$i['chain_addr']">$i['login_name'] ($i['chain_addr'][-8:])</option>
+	</select>
+</td></tr>
+<tr><td>底价</td><td class="t_l"><input type="text" name="reserved_price" value="" size="80"/></td></tr>
+
+</tbody>
+</table>
+
+<p>
+<input type="button" name="button" value="提交" onclick="$$('.floatLayer').show();$$('#form').submit();" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /></p>
+
+
+</form>

@@ -1,0 +1,19 @@
+$def with (name, str1, addr='', news=[])
+
+$var title: 首页
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+
+<div class="caption"><h2>bid1.art 管理员</h2></div>
+
+<div class="article_box">
+	$for nn in news:
+		<p class="red">$nn</p>
+</div>
+
+<dl class="feature">
+        <dt>Changelog</dt>
+        <dd>2021-05-07 测试链</dd>
+        <dd>2021-06-16 完成主流程</dd>
+</dl>
