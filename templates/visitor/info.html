@@ -4,11 +4,17 @@ $var title: 提示信息
 $var css:
 $var js:
 
-<div class="caption"><h2>提示信息</h2></div>
-<div class="mod_desc">
-        <p>$info</p>
-</div>
+<main class="main">
+	<div class="main-content">
+		<div class="main-content-title">$title</div>
+		<div class="main-content-richtext">
 
-<div class="article_box">
-<p><a href="$goto" class="btn">$text2</a></p>
-</div>
+			<p>$info</p>
+
+			<div>
+			<p><a href="$goto" class="main-content-tab-list-more">$text2</a></p>
+			</div>
+
+		</div>
+	</div>
+</main>

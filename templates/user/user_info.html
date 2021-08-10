@@ -8,42 +8,131 @@ $var load:
 $var menu: #user1
 $var addr: $addr
 
-<div class="caption"><h2>用户信息</h2></div>
-
-
-<table class="props_tb">
-<thead>
-        <tr class="even">
-            <th>项目</th>
-            <th>内容</th>
-        </tr>
-</thead>
-<tbody>
-
-<tr><td>用户名</td><td class="t_l">$user['login_name']</td></tr>
-<tr><td>用户链地址</td><td class="t_l">$user['chain_addr']</td></tr>
-<tr><td>用户类型</td><td class="t_l">$user_type[user['user_type'].split('|')[0]]</td></tr>
-<tr><td>银行开户姓名</td><td class="t_l">$user['bank_acc_name']</td></tr>
-<tr><td>银行名称</td><td class="t_l">$user['bank_name']</td></tr>
-<tr><td>银行账号</td><td class="t_l">$user['bank_acc_no']</td></tr>
-<tr><td>收货地址</td><td class="t_l">$user['address']</td></tr>
-<tr><td>联系电话</td><td class="t_l">$user['phone']</td></tr>
-<tr><td>电子邮件</td><td class="t_l">$user['email']</td></tr>
-<tr><td>推荐人链地址</td><td class="t_l">$user['referrer']</td></tr>
-<tr><td>状态</td><td class="t_l">$user['status']</td></tr>
-<tr><td>通证</td><td class="t_l">$balance['amount'] $balance['denom']</td></tr>
-
-</tbody>
-</table>
-
-<div class="article_box">
-<a class="btn" href="/user/edit?uid=$addr">修改用户信息</a>
-</div>
-
-<div class="article_box">
-    <div>修改历史：</div>
-    <textarea rows="8" cols="100" id="history">
-    $for h in user['last_date']:
-        $h['date']，用户：$h['caller'][-8:]，操作：$h['act']；
-    </textarea>
-</div>
+<main class="main">
+	<div class="main-content">
+		<div class="main-bread">当前位置： 首页＞ 个人中心</div>
+		<div class="user-content flex">
+			<div class="user-content-l">
+				<div class="user-head-info flex ai_center jc_center fd_c">
+					<img class="user-headimg" src="/static/image/chain.jpg">
+					<div class="user-name">
+						$if len(name)>0:
+							$name ($addr[-8:])
+					</div>
+				</div>
+				<div class="user-nav">
+					<a href="./usercenter.html" class="user-nav-item flex">
+						<i class="icon icon-grxx"></i>
+						<div class="user-nav-title active">个人信息</div>
+					</a>
+					<div class="user-nav-item flex">
+						<i class="icon icon-ysp"></i>
+						<div>
+							<div class="user-nav-title">艺术品&拍卖</div>
+							<div>
+								<div class="user-nav-title">我的艺术品</div>
+								<div class="user-nav-title">我发起的拍卖</div>
+							</div>
+						</div>
+					</div>
+					<div class="user-nav-item flex">
+						<i class="icon icon-pmgl"></i>
+						<div>
+							<div class="user-nav-title">交易管理</div>
+							<div>
+								<div class="user-nav-title">我拍到的艺术品</div>
+								<div class="user-nav-title">我卖出的艺术品</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="out-login" onclick="javascript:window.location.href='/logout'">退出登录</div>
+			</div>
+			<div class="user-content-r flex1">
+				<div class="user-content-r-title">个人信息</div>
+				<div class="r-user-head">
+					<img class="r-user-headimg" src="/static/image/chain.jpg">
+					<!--div class="r-user-headimg-box flex ai_center jc_center">
+						<i class="icon icon-photo"></i>
+					</div-->
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">用户名</div>
+					<div class="r-user-info-content">
+						$user['login_name']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">用户链地址</div>
+					<div class="r-user-info-content">
+						$user['chain_addr']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">用户类型</div>
+					<div class="r-user-info-content">
+						$user_type[user['user_type'].split('|')[0]]
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">银行卡开户名</div>
+					<div class="r-user-info-content">
+						$user['bank_acc_name']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">银行账号</div>
+					<div class="r-user-info-content">
+						$user['bank_acc_no']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">银行名称</div>
+					<div class="r-user-info-content">
+						$user['bank_name']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">收货地址</div>
+					<div class="r-user-info-content">
+						$user['address']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">联系电话</div>
+					<div class="r-user-info-content">
+						$user['phone']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">电子邮件</div>
+					<div class="r-user-info-content">
+						$user['email']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">推荐人链地址</div>
+					<div class="r-user-info-content">
+						$user['referrer']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">状态</div>
+					<div class="r-user-info-content">
+						$user['status']
+					</div>
+				</div>
+				<div class="r-user-info-list flex ai_center">
+					<div class="r-user-info-title">通证</div>
+					<div class="r-user-info-content">
+						$balance['amount'] $balance['denom']
+					</div>
+				</div>
+				<div class="r-user-info-list flex">
+					<div class="r-user-info-title"></div>
+					<div class="r-user-info-btn">修改</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+</main>

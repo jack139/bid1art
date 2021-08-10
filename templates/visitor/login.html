@@ -1,37 +1,12 @@
 $def with (signup, png)
 
 $var title: 登录
-$var css: /static/layui/css/layui.css
-$var js: /static/layui/layui.js
+$var css: 
+$var js: 
 
-<!-- 头部 -->
-<header class="header flex ai_center">
-    <div class="header-content flex ai_center">
-        <img class="logo" src="/static/img/logo.png" alt="">
-        <div class="header-nav flex ai_center flex1">
-            <a href="./index.html" class="header-nav-item">首页</a>
-            <a href="./preview.html" class="header-nav-item">在线预览</a>
-            <a href="./history.html" class="header-nav-item">往期竞拍</a>
-            <a class="header-nav-item">资讯</a>
-            <a href="./about.html" class="header-nav-item">关于艺术链</a>
-        </div>
-        <div class="header-right flex ai_center">
-            <div class="header-collect">收藏夹</div>
-            <!-- 未登录 -->
-            <a href="./login.html" class="header-login flex ai_center">
-                <img class="header-login-user" src="/static/img/user.png" alt="">
-                <span class="header-login-btn">登录 / 注册</span>
-            </a>
-            <!-- 已登录 -->
-            <!-- <a href="./usercenter.html" class="header-login flex ai_center">
-                <img class="header-login-user" src="../img/user.png" alt="">
-                <span class="header-login-btn">不一样的烟火</span>
-            </a> -->
-        </div>
-    </div>
-</header>
 <main class="main">
     <div class="login">
+        <form name="f_login" method="post" action="/login" id="form">
         <div class="login-content">
             <div class="login-tab flex ai_center jc_center">
                 <div class="login-tab-item active">密码登录</div>
@@ -40,23 +15,24 @@ $var js: /static/layui/layui.js
             <div class="login-content-form">
                 <div class="login-content-item flex ai_center">
                     <i class="icon icon-account"></i>
-                    <input class="login-content-input flex1" type="text" placeholder="请输入账号">
+                    <input class="login-content-input flex1" type="text" name="chainaddr" placeholder="请输入链地址">
                 </div>
                 <div class="login-content-item flex ai_center">
                     <i class="icon icon-password"></i>
-                    <input class="login-content-input flex1" type="password" placeholder="请输入密码">
+                    <input class="login-content-input flex1" type="text" name="passwd" placeholder="请输入密码字符串">
                 </div>
                 <div class="login-content-verification flex ai_center">
                     <div class="login-content-item flex ai_center flex1">
-                        <input class="login-content-input2 flex1" type="text" placeholder="请输入图形验证码">
+                        <input class="login-content-input2 flex1" type="text" name="rand" placeholder="请输入图形验证码">
                     </div>
-                    <img class="login-content-verification-img" src="" alt="">
+                    <img class="login-content-verification-img" src="$png" alt="">
                 </div>
                 <div class="login-forget">忘记密码?</div>
-                <div class="login-content-btn">登 录</div>
+                <div class="login-content-btn" onclick="$$('#form').submit();">登 录</div>
                 <div class="login-content-register">还没有帐号，<a href="">立即注册</a></div>
             </div>
         </div>
+    </form>
     </div>
 </main>
 
