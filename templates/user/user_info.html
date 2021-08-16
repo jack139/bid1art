@@ -21,16 +21,16 @@ $var addr: $addr
 					</div>
 				</div>
 				<div class="user-nav">
-					<a href="./usercenter.html" class="user-nav-item flex">
+					<div class="user-nav-item flex">
 						<i class="icon icon-grxx"></i>
 						<div class="user-nav-title active">个人信息</div>
-					</a>
+					</div>
 					<div class="user-nav-item flex">
 						<i class="icon icon-ysp"></i>
 						<div>
 							<div class="user-nav-title">艺术品&拍卖</div>
 							<div>
-								<div class="user-nav-title">我的艺术品</div>
+								<div class="user-nav-title" onclick="window.location.href='/item/list?owner=$addr'">我的艺术品</div>
 								<div class="user-nav-title">我发起的拍卖</div>
 							</div>
 						</div>
@@ -46,7 +46,7 @@ $var addr: $addr
 						</div>
 					</div>
 				</div>
-				<div class="out-login" onclick="javascript:window.location.href='/logout'">退出登录</div>
+				<div class="out-login" onclick="window.location.href='/logout'">退出登录</div>
 			</div>
 			<div class="user-content-r flex1">
 				<div class="user-content-r-title">个人信息</div>

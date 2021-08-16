@@ -1,6 +1,6 @@
-$def with (name, str1, addr, items, page, has_next, is_myitem, cols=4)
+$def with (name, str1, addr, items, page, has_next, is_myitem, cols=3)
 
-$var title: 所有艺术品
+$var title: 我的艺术品
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
@@ -8,52 +8,89 @@ $var load:
 $var menu: $("#trdd1" if is_myitem>0 else "#trdd2")
 $var addr: $addr
 
-<div class="caption"><h2>所有艺术品</h2></div>
+<main class="main">
+    <div class="main-content">
+        <div class="main-bread">当前位置： 首页＞ 个人中心</div>
+        <div class="user-content flex">
+            <div class="user-content-l">
+                <div class="user-head-info flex ai_center jc_center fd_c">
+                    <img class="user-headimg" src="/static/image/chain.jpg">
+                    <div class="user-name">
+                        $if len(name)>0:
+                            $name ($addr[-8:])
+                    </div>
+                </div>
+                <div class="user-nav">
+                    <div class="user-nav-item flex">
+                        <i class="icon icon-grxx"></i>
+                        <div class="user-nav-title" onclick="window.location.href='/user/info?uid=$addr'">个人信息</div>
+                    </div>
+                    <div class="user-nav-item flex">
+                        <i class="icon icon-ysp"></i>
+                        <div>
+                            <div class="user-nav-title">艺术品&拍卖</div>
+                            <div>
+                                <div class="user-nav-title active">我的艺术品</div>
+                                <div class="user-nav-title">我发起的拍卖</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-nav-item flex">
+                        <i class="icon icon-pmgl"></i>
+                        <div>
+                            <div class="user-nav-title">交易管理</div>
+                            <div>
+                                <div class="user-nav-title">我拍到的艺术品</div>
+                                <div class="user-nav-title">我卖出的艺术品</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="out-login" onclick="javascript:window.location.href='/logout'">退出登录</div>
+            </div>
 
-$if u'ITEM' in str1:
-    <p><a class="abtn" href="/item/edit?pos=$self.menu">添加艺术品</a></p>
+            <div class="user-content-r flex1">
+                <div class="user-content-r-title" style="border:none">
+                    <div>我的艺术品</div>
+                    $if u'ITEM' in str1:
+                        <div class="main-content-list-info-btn" 
+                            onclick="javascript:window.location.href='/item/edit?pos=$self.menu'">添加艺术品</div>
+                    <div class="main-content-tab flex">
+                        <div class="main-content-tab-item tab-list active">艺术品列表</div>
+                        <div class="main-content-tab-item tab-list">评价信息</div>
+                    </div>
+                </div>
+                <div class="user-content-artwork flex">
+                    $for i,u in enumerate(items):
+                        <div class="user-content-artwork-item">
+                            <a href="/item/info?item_id=$u[0]&pos=$self.menu[1:]">
+                            $if len(u[3])>0:
+                                <img class="user-content-artwork-img" src="/plat/get_image?hash=$u[3][0]" alt="">
+                            $else:
+                                <img class="user-content-artwork-img" src="/static/image/wood-box.png" alt="">
+                            <div class="user-content-artwork-info">
+                                <div class="user-content-artwork-info-name">$u[1] ($u[2])</div>
+                                <div class="user-content-artwork-info-desc">产品文字描述说明，描述说明产品文字描述说明，描述说明产品文字描述说明，描述说明</div>
+                            </div>
+                        </div>
+                        $if (i+1)%cols==0:
+                            </div><div class="user-content-artwork flex">
+                </div>
+                <div class="pages flex jc_center" id="pages"></div>
+            </div>
+        </div>
+    </div>
+</main>
 
-<table class="props_tb">
-<thead>
-        <tr class="even">
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-</thead>
-<tbody>
-
-<tr>
-$for i,u in enumerate(items):
-    <td>
-        <div><a href="/item/info?item_id=$u[0]&pos=$self.menu[1:]">
-            $if len(u[3])>0:
-                <img src="/plat/get_image?hash=$u[3][0]" width="150" />
-            $else:
-                <img src="/static/image/wood-box.png" width="150" />
-        </a></div>
-        <div>$u[1]</div>
-        <div>$u[2]</div>
-    </td>
-    $if (i+1)%cols==0:
-        </tr><tr>
-</tr>
-
-</tbody>
-</table>
-
-<br/>
-<div class="article_box">
-    $if page > 1:
-        $if is_myitem>0:
-            <a href="/item/list?page=$(page-1)&owner=$addr">前一页</a>&nbsp;&nbsp;
-        $else:
-            <a href="/item/list?page=$(page-1)">前一页</a>&nbsp;&nbsp;
-    &nbsp;&nbsp;- $page -&nbsp;&nbsp;
-    $if has_next:
-        $if is_myitem>0:
-            <a href="/item/list?page=$(page+1)&owner=$addr">后一页</a>
-        $else:
-            <a href="/item/list?page=$(page+1)">后一页</a>
-</div>
+<script>
+    layui.use(['laypage', 'layer'], function(){
+      var laypage = layui.laypage
+      ,layer = layui.layer;
+      laypage.render({
+        elem: 'pages'
+        ,count: 100
+        ,limit: 10
+        ,theme: '#E3B76D'
+      });
+    })
+</script>
