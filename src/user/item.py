@@ -44,7 +44,8 @@ class handler:
         items=[]
         for u in r1['data']['item_list']:
             items.append([u['id'],u['desc'],u['status'],
-                json.loads(u['image']) if len(u['image'])>2 else []
+                json.loads(u['image']) if len(u['image'])>2 else [],
+                u['detail']
             ])
 
         return render.item(helper.get_session_uname(), helper.get_privilege_name(), helper.get_session_addr(),
