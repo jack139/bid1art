@@ -1,4 +1,4 @@
-PY = python3 -O -m compileall -b -q -f
+PY = python3.6 -O -m compileall -b -q -f
 
 CONFIG = config
 
